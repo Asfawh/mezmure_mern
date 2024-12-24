@@ -1,0 +1,28 @@
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+
+.img {
+  width: 630px;
+  height: 400px;
+  align-items: center;
+}
+
+.pre-wrap-text {
+  white-space: pre-wrap;
+  text-break: all;
+}
+
+@media (min-width: 48rem) {
+  .grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (min-width: 62rem) {
+  .grid {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+}
