@@ -44,7 +44,7 @@ function EachSong({ song, setIsLoaded }) {
           <Figure.Caption className="blockquote-footer"></Figure.Caption>
         </Figure>
       </Card.Body>
-      <Card.Footer>
+      <Card.Footer className="mb-4 mt-3 text-center">
         <small>
           <Link to={`/songs/${song._id}`} className="link-primary">
             View

@@ -37,14 +37,14 @@ function Details() {
       {song && (
         <div className="row">
           <Card bg="light" text="dark" className="shadow col">
-            <Card.Body>
+            <Card.Body className="text-center  ">
               <img
                 // className={styles.img}
                 src={song.image}
                 alt={song.songName}
                 // className="img-fluid mb-3"
               />
-              <Figure className="ms-5">
+              <Figure className="ms-5 ">
                 
                 <p className="text-center mt-3">
         <strong>{song.songName}</strong>
