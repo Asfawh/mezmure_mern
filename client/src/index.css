@@ -196,6 +196,18 @@ a:hover { color: var(--wine); }
 
 .library-section { padding-top: 4rem; }
 .section-heading { display: flex; align-items: end; justify-content: space-between; gap: 1rem; margin-bottom: 1.5rem; }
+.section-heading-copy { display: flex; align-items: center; min-width: 0; gap: clamp(0.75rem, 2vw, 1.2rem); }
+.section-heading-cross {
+  width: clamp(58px, 6.2vw, 82px);
+  height: clamp(78px, 8.3vw, 110px);
+  flex: 0 0 auto;
+  object-fit: contain;
+  filter:
+    sepia(0.12)
+    saturate(1.2)
+    contrast(1.08)
+    drop-shadow(0 7px 12px rgba(84, 28, 43, 0.18));
+}
 .section-heading .eyebrow { margin-bottom: 0.4rem; }
 .section-heading h2 { margin: 0; color: var(--wine-dark); font-family: Georgia, "Times New Roman", serif; font-size: clamp(2rem, 4vw, 3.15rem); }
 .results-label { padding: 0.45rem 0.85rem; border-radius: 999px; background: #eadfce; color: var(--wine); font-size: 0.8rem; font-weight: 700; }
@@ -611,6 +623,7 @@ a:hover { color: var(--wine); }
       url('/assets/ethiopian-mezmure-hero.png') 67% center / cover no-repeat;
   }
   .section-heading { align-items: start; flex-direction: column; }
+  .section-heading-cross { width: 52px; height: 70px; }
   .workspace-hero { border-radius: 20px; }
   .editor-card-header, .manager-card-header, .editor-card-body { padding-inline: 1.1rem; }
   .footer-grid { grid-template-columns: 1fr; gap: 1.25rem; }
