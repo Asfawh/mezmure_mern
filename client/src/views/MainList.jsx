@@ -126,7 +126,7 @@ function MainList() {
             type="search"
             value={searchValue}
             onChange={(event) => setSearchValue(event.target.value)}
-            placeholder="Search title, artist, genre, source, or verses…"
+            placeholder="Search title, Zemari, genre, source, or verses…"
             aria-label="Search the Mezmure library"
           />
           {query && (
@@ -147,7 +147,7 @@ function MainList() {
         {isLoaded && !loadError && visibleSongs.length === 0 && (
           <div className="empty-state">
             <strong>No Mezmure found.</strong>
-            <span>Try another title, artist, or genre.</span>
+            <span>Try another title, Zemari, or genre.</span>
           </div>
         )}
         <div className={styles.grid}>

@@ -15,7 +15,7 @@ function SongsList({ songs, setIsLoaded }) {
           <thead>
             <tr>
               <th>Mezmure</th>
-              <th>Artist</th>
+              <th>Zemari</th>
               <th>Genre</th>
               <th>Source</th>
               <th>Actions</th>

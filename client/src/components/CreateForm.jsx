@@ -102,7 +102,7 @@ const CreateForm = ({ setIsLoaded }) => {
               <p className="error">{errors.artistName.message}</p>
             )}
             <label htmlFor="artistName" className="form-label">
-              Artist name
+              Zemari name
             </label>
             <input
               type="text"
