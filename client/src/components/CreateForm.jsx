@@ -1,8 +1,8 @@
 import { useContext, useEffect, useState } from 'react';
-import axios from 'axios';
 import SONG_SERVICE from '../services/song.service';
 import { AuthContext } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import { MEZMURE_SOURCE } from '../config/mezmure';
 
 const songGenre = ['Yensiha', 'Woreb', 'Chebchebo'];
 
@@ -11,9 +11,9 @@ const CreateForm = ({ setIsLoaded }) => {
   const initialSong = {
     songName: '',
     artistName: '',
-    fileName: '',
+    fileName: MEZMURE_SOURCE,
     verses: '',
-    genre: '',
+    genre: songGenre[0],
     pageNumber: '',
     createdBy: state.user?.id,
   };
@@ -21,12 +21,15 @@ const CreateForm = ({ setIsLoaded }) => {
   const navigate = useNavigate();
   const [song, setSong] = useState(initialSong);
   const [errors, setErrors] = useState({});
+  const [validated, setValidated] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [successMessage, setSuccessMessage] = useState('');
 
   useEffect(() => {
     if (!state.user) {
-    navigate('/songs');
+      navigate('/songs');
     }
-  });
+  }, [state.user, navigate]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -36,42 +39,50 @@ const CreateForm = ({ setIsLoaded }) => {
     }));
   };
 
-  const readyToSubmit = () => {
-    for (let key in errors) {
-      if (errors[key] !== true) {
-        return false;
-      }
-    }
-    return true;
-  };
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!readyToSubmit()) {
-      alert('Please make a correction to the form.');
-      window.location.reload();
-
+    if (!e.currentTarget.checkValidity()) {
+      e.stopPropagation();
+      setValidated(true);
       return;
     }
 
-    SONG_SERVICE.createSong(song)
-      .then(() => setSong(initialSong))
-      .catch((err) => setErrors(err.response.data.errors));
-    setIsLoaded(false);
+    setValidated(true);
+    setIsSubmitting(true);
+    setErrors({});
+    setSuccessMessage('');
+
+    try {
+      await SONG_SERVICE.createSong(song);
+      setSong(initialSong);
+      setValidated(false);
+      setSuccessMessage('Mezmure added to the library.');
+      setIsLoaded(false);
+    } catch (err) {
+      setErrors(err.response?.data?.errors || {});
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
-    <div className="card shadow">
-      <h3 className="card-header text-center">Create</h3>
-      <p className="text-center mt-3">Add a new Song</p>
-      <div className="card-body">
-        <form onSubmit={handleSubmit}>
+    <div className="editor-card">
+      <div className="editor-card-header">
+        <span className="editor-step">01</span>
+        <div>
+          <h2>Create Mezmure</h2>
+          <p>Fields marked required help visitors find and read the Mezmure.</p>
+        </div>
+      </div>
+      <div className="editor-card-body">
+        {successMessage && <div className="alert alert-success">{successMessage}</div>}
+        <form noValidate className={validated ? 'was-validated' : ''} onSubmit={handleSubmit}>
           <div className="mb-3">
             {errors.songName && (
               <p className="error">{errors.songName.message}</p>
             )}
             <label htmlFor="songName" className="form-label">
-              Song Name:
+              Mezmure name *
             </label>
             <input
               type="text"
@@ -80,7 +91,10 @@ const CreateForm = ({ setIsLoaded }) => {
               value={song.songName}
               className="form-control"
               onChange={handleChange}
+              required
+              minLength={2}
             />
+            <div className="invalid-feedback">Enter a Mezmure name of at least two characters.</div>
           </div>
 
           <div className="mb-3">
@@ -88,7 +102,7 @@ const CreateForm = ({ setIsLoaded }) => {
               <p className="error">{errors.artistName.message}</p>
             )}
             <label htmlFor="artistName" className="form-label">
-              ArtistName:
+              Artist name
             </label>
             <input
               type="text"
@@ -102,7 +116,7 @@ const CreateForm = ({ setIsLoaded }) => {
           <div className="mb-3">
             {errors.genre && <p className="error">{errors.genre.message}</p>}
             <label htmlFor="genre" className="form-label">
-              Genre :
+              Genre *
             </label>
             <select
               name="genre"
@@ -110,6 +124,7 @@ const CreateForm = ({ setIsLoaded }) => {
               className="form-select"
               value={song.genre}
               onChange={handleChange}
+              required
             >
               {songGenre.map((genreType) => (
                 <option key={genreType} value={genreType}>
@@ -123,7 +138,7 @@ const CreateForm = ({ setIsLoaded }) => {
               <p className="error">{errors.fileName.message}</p>
             )}
             <label htmlFor="fileName" className="form-label">
-              FileName: (Optional):
+              Source attribution
             </label>
             <input
               type="text"
@@ -131,7 +146,7 @@ const CreateForm = ({ setIsLoaded }) => {
               id="fileName"
               className="form-control"
               value={song.fileName}
-              onChange={handleChange}
+              readOnly
             />
           </div>
 
@@ -139,7 +154,7 @@ const CreateForm = ({ setIsLoaded }) => {
             {errors.verses && <p className="error">{errors.verses.message}</p>}
 
             <label htmlFor="verses" className="form-label">
-              Verses:
+              Verses *
             </label>
             <textarea
               type="text"
@@ -148,11 +163,14 @@ const CreateForm = ({ setIsLoaded }) => {
               value={song.verses}
               className="form-control"
               onChange={handleChange}
+              required
+              rows={9}
             />
+            <div className="invalid-feedback">Enter the Mezmure verses.</div>
           </div>
           <div className="mb-3">
             <label htmlFor="pageNumber" className="form-label">
-              PageNumber (Optional):
+              Page number
             </label>
             <input
               type="number"
@@ -176,9 +194,10 @@ const CreateForm = ({ setIsLoaded }) => {
               onChange={handleChange}
             />
           </div> */}
-          <div className="text-end">
-            <button type="submit" className="btn btn-primary">
-              Create
+          <div className="editor-actions">
+            <span>Your Mezmure will be visible in the public library.</span>
+            <button type="submit" className="btn btn-primary" disabled={isSubmitting}>
+              {isSubmitting ? 'Adding Mezmure…' : 'Add to library'}
             </button>
           </div>
         </form>

@@ -4,6 +4,7 @@ import { AuthContext } from '../../context/AuthContext';
 
 function useLoginReg() {
   const [errors, setErrors] = useState(null);
+  const [generalError, setGeneralError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const { dispatch } = useContext(AuthContext);
 
@@ -12,6 +13,7 @@ function useLoginReg() {
 
     try {
       setErrors(null);
+      setGeneralError('');
 
       // call api with appropriate uri and data
       const user = await callLoginReg(path, formData);
@@ -26,7 +28,12 @@ function useLoginReg() {
       setIsLoading(false);
     } catch (err) {
       // catch any api errors
-      setErrors(err?.response?.data?.errors);
+      const responseData = err?.response?.data;
+      setErrors(responseData?.errors || null);
+      setGeneralError(
+        responseData?.message ||
+          'Registration could not be completed. Please try again.'
+      );
 
       // done loading, set to false
       setIsLoading(false);
@@ -36,7 +43,7 @@ function useLoginReg() {
     }
   };
 
-  return { loginReg, errors, isLoading };
+  return { loginReg, errors, generalError, isLoading };
 }
 
 export default useLoginReg;

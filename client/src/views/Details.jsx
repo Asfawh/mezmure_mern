@@ -1,63 +1,95 @@
-import axios from 'axios';
-/* react */
-import { useContext } from 'react';
-import { Fragment, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import SONG_SERVICE from '../services/song.service';
-import { AuthContext } from '../context/AuthContext';
+import { getDisplayedMezmureSource } from '../config/mezmure';
 
-import Card from 'react-bootstrap/Card';
-import Figure from 'react-bootstrap/Figure';
-import styles from '../css/song-list.module.css';
+const isLyricsHeading = (line) => (
+  /^(chorus|refrain|verse|meaning|translation)\b[\s.:…-]*/i.test(line.trim())
+);
 
 function Details() {
   const { id } = useParams();
-  const [song, setSong] = useState({});
-  const {
-    state: { user },
-  } = useContext(AuthContext);
+  const [song, setSong] = useState(null);
+  const [loadError, setLoadError] = useState('');
 
   useEffect(() => {
     SONG_SERVICE.getSongById(id)
-      .then((res) => setSong(res))
-      .catch((err) => console.error(err));
+      .then((res) => {
+        setSong(res);
+        setLoadError('');
+      })
+      .catch(() => setLoadError('This Mezmure could not be loaded. Please try again.'));
   }, [id]);
 
-  return (
-    <Fragment>
-      <div className="text-end">
-        <Link to={`/songs/`} className="btn btn-primary">
-          Home
-        </Link>
+  if (loadError) {
+    return (
+      <div className="lyrics-status">
+        <strong>{loadError}</strong>
+        <Link to="/songs">Return to the Mezmure library</Link>
       </div>
-      <p className="mb-3">
-                  <strong>ArtistName:</strong> {song.artistName}
-                </p>
+    );
+  }
 
-      {song && (
-        <div className="row">
-          <Card bg="light" text="dark" className="shadow col">
-            <Card.Body className="text-center  ">
-              <img
-                // className={styles.img}
-                src={song.image}
-                alt={song.songName}
-                // className="img-fluid mb-3"
-              />
-              <Figure className="ms-5 ">
-                
-                <p className="text-center mt-3">
-        <strong>{song.songName}</strong>
-      </p>
-                <div style={{ whiteSpace: 'pre-wrap' }}>
-                   {song.verses}
-                </div>
-              </Figure>
-            </Card.Body>
-          </Card>
+  if (!song) {
+    return <div className="lyrics-status">Loading lyrics…</div>;
+  }
+
+  const lyrics = song.verses
+    ?.replace(/\r\n?/g, '\n')
+    .trim()
+    .split('\n') || [];
+  const displayedSource = getDisplayedMezmureSource(song);
+
+  return (
+    <article className="lyrics-page">
+      <Link to="/songs" className="lyrics-back">
+        <span aria-hidden="true">←</span> Back to Mezmure library
+      </Link>
+
+      <header className="lyrics-header">
+        <span className="eyebrow">Mezmure lyrics</span>
+        <h1>{song.songName}</h1>
+        <div className="lyrics-meta">
+          <span>{song.artistName || 'Traditional'}</span>
+          {song.genre && <span>{song.genre}</span>}
+          {song.pageNumber && <span>Page {song.pageNumber}</span>}
+          {displayedSource && <span>Source: {displayedSource}</span>}
         </div>
-      )}
-    </Fragment>
+      </header>
+
+      <section className="lyrics-sheet" aria-labelledby="lyrics-heading">
+        <div className="lyrics-sheet-heading">
+          <span className="lyrics-ornament" aria-hidden="true">✥</span>
+          <h2 id="lyrics-heading">Lyrics</h2>
+          <span className="lyrics-ornament" aria-hidden="true">✥</span>
+        </div>
+
+        <div className="lyrics-body">
+          {lyrics.length > 0 ? lyrics.map((line, index) => {
+            if (!line.trim()) {
+              return <div className="lyrics-stanza-break" aria-hidden="true" key={`break-${index}`} />;
+            }
+
+            return (
+              <div
+                className={isLyricsHeading(line) ? 'lyrics-line lyrics-label' : 'lyrics-line'}
+                key={`${line}-${index}`}
+              >
+                {line.trim()}
+              </div>
+            );
+          }) : (
+            <p className="lyrics-empty">Lyrics have not been added yet.</p>
+          )}
+        </div>
+
+        <footer className="lyrics-sheet-footer">
+          <span>{song.songName}</span>
+          <Link to="/songs">Explore more Mezmure</Link>
+        </footer>
+      </section>
+    </article>
   );
 }
+
 export default Details;

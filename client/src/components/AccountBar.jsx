@@ -53,16 +53,18 @@ function AccountBar() {
   };
 
   return (
-    <div className="d-flex bg-dark text-light mb-3">
+    <div className="account-strip">
       <Container>
-        <div className="text-end py-2">
+        <div className="account-strip-inner">
+          <span className="account-welcome">
+            {username ? `Welcome back, ${username}` : 'Join the community to add and manage Mezmure'}
+          </span>
           <AccountModal
             title={`${username ? username : 'Login or Register'}`}
             options={options}
             handleSelect={handleSelect}
           />
         </div>
-        <div className="text-center mt-3"></div>
       </Container>
 
       <LoginModal showLogin={showLogin} handleClose={handleClose} />

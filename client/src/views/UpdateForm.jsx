@@ -4,6 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import SONG_SERVICE from '../services/song.service';
 import { AuthContext } from '../context/AuthContext';
+import { MEZMURE_SOURCE } from '../config/mezmure';
 
 const songGenre = ['Yensiha', 'Woreb', 'Chebchebo'];
 const UpdateForm = () => {
@@ -11,7 +12,7 @@ const UpdateForm = () => {
   const initialSong = {
     songName: '',
     artistName: '',
-    fileName: '',
+    fileName: MEZMURE_SOURCE,
     verses: '',
     genre: '',
     createdBy: state.user?.id,
@@ -20,14 +21,14 @@ const UpdateForm = () => {
   const navigate = useNavigate();
   const [song, setSong] = useState(initialSong);
   const [errors, setErrors] = useState({});
-  const baseUrl = 'http://localhost:8004/api/songs';
+  const baseUrl = `${import.meta.env.VITE_API_BASE_URL || ''}/api/songs`;
 
   useEffect(() => {
     if (!state.user) {
       navigate('/songs');
     }
     SONG_SERVICE.getSongById(id)
-      .then((res) => setSong(res))
+      .then((res) => setSong({ ...res, fileName: MEZMURE_SOURCE }))
       .catch((err) => console.log(err));
   }, [id]);
 
@@ -52,7 +53,7 @@ const UpdateForm = () => {
   return (
     <div className="card shadow">
       <h3 className="card-header text-center">Edit</h3>
-      <p className="text-center mt-3">Edit Song</p>
+      <p className="text-center mt-3">Edit Mezmure</p>
       <div className="card-body">
         <form onSubmit={handleSubmit}>
           <div className="mb-3">
@@ -60,7 +61,7 @@ const UpdateForm = () => {
               <p className="error">{errors.songName.message}</p>
             )}
             <label htmlFor="songName" className="form-label">
-              Song Name:
+              Mezmure Name:
             </label>
             <input
               type="text"
@@ -154,15 +155,15 @@ const UpdateForm = () => {
           </div>
           <div className="mb-3">
             <label htmlFor="fileName" className="form-label">
-              File Name (Optional):
+              Source attribution:
             </label>
             <input
               type="text"
               name="fileName"
               id="fileName"
-              value={song.fileName}
+              value={MEZMURE_SOURCE}
               className="form-control"
-              onChange={handleChange}
+              readOnly
             />
           </div>
           <div className="text-end">

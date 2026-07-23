@@ -2,18 +2,23 @@ import SongRow from './SongRow';
 
 function SongsList({ songs, setIsLoaded }) {
   return (
-    <div className="card shadow ">
-      <h3 className="card-header text-center">All Songs</h3>
-      <p className="text-center mt-3">Songs added by Users</p>
-      <div className="card-body">
-        <table className="table table-sm table-hover table-striped">
+    <div className="manager-card">
+      <div className="manager-card-header">
+        <span className="editor-step">02</span>
+        <div>
+          <h2>All Mezmure</h2>
+          <p>{songs.length} Mezmure in the collection</p>
+        </div>
+      </div>
+      <div className="manager-table-wrap">
+        <table className="table manager-table">
           <thead>
             <tr>
-              <th>Song Name:</th>
-              <th>Artist Name:</th>
-              <th>Genre:</th>
-              <th>File Name:</th>
-              <th> Action:</th>
+              <th>Mezmure</th>
+              <th>Artist</th>
+              <th>Genre</th>
+              <th>Source</th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody>

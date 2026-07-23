@@ -1,21 +1,24 @@
-import { connect } from 'mongoose';
+import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 
 dotenv.config();
 
-const DB_NAME = process.env.DB_NAME;
-const DB_USER = process.env.DB_USER;
-const DB_PASSWORD = process.env.DB_PASSWORD;
-const MONGODB_URI = `mongodb+srv://${DB_USER}:${DB_PASSWORD}@cluster0.oowm8ce.mongodb.net/${DB_NAME}`;
-// const MONGODB_URI = `mongodb+srv://${DB_USER}:${DB_PASSWORD}@cluster0.oowm8ce.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
-
 const dbConnect = async () => {
+  if (mongoose.connection.readyState === 1) return mongoose.connection;
+
+  const MONGODB_URI = process.env.MONGODB_URI;
+  if (!MONGODB_URI) throw new Error('MONGODB_URI is required');
+
   try {
-    await connect(MONGODB_URI, { retryWrites: true });
-    // connect(MONGODB_URI, { dbName: 'Song' });
+    await mongoose.connect(MONGODB_URI, {
+      retryWrites: true,
+      serverSelectionTimeoutMS: 10000,
+    });
     console.log('Connected to MongoDB');
+    return mongoose.connection;
   } catch (error) {
-    console.log(`DB Connection Failed: Error --> ${error}`);
+    console.error('Database connection failed');
+    throw error;
   }
 };
 

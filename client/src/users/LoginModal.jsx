@@ -17,7 +17,8 @@ const initialFormState = {
 
 function LoginModal({ showLogin, handleClose }) {
   const [formState, setFormState] = useState(initialFormState);
-  const { loginReg, errors, isLoading } = useLoginReg();
+  const [validated, setValidated] = useState(false);
+  const { loginReg, errors, generalError, isLoading } = useLoginReg();
 
   const handleChange = (e) => {
     const { id, value } = e.target;
@@ -26,14 +27,24 @@ function LoginModal({ showLogin, handleClose }) {
 
   const handleCancel = () => {
     setFormState(initialFormState);
+    setValidated(false);
     handleClose('login');
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const form = e.currentTarget;
+    if (!form.checkValidity()) {
+      e.stopPropagation();
+      setValidated(true);
+      return;
+    }
+
+    setValidated(true);
     try {
       await loginReg('login', formState);
       setFormState(initialFormState);
+      setValidated(false);
       handleClose('login');
     } catch (err) {
       console.log(err);
@@ -42,7 +53,7 @@ function LoginModal({ showLogin, handleClose }) {
 
   return (
     <Modal show={showLogin} onHide={() => handleClose('login')}>
-      <Form onSubmit={handleSubmit}>
+      <Form noValidate validated={validated} onSubmit={handleSubmit}>
         <Modal.Header closeButton>
           <Modal.Title>Login</Modal.Title>
         </Modal.Header>
@@ -55,10 +66,14 @@ function LoginModal({ showLogin, handleClose }) {
           <Form.Group className="mb-3" controlId="email">
             <Form.Label>Email:</Form.Label>
             <Form.Control
-              type="text"
+              type="email"
               value={formState.email}
               onChange={handleChange}
+              required
             />
+            <Form.Control.Feedback type="invalid">
+              Enter your email address.
+            </Form.Control.Feedback>
           </Form.Group>
           <Form.Group className="mb-3" controlId="password">
             <Form.Label>Password:</Form.Label>
@@ -66,15 +81,24 @@ function LoginModal({ showLogin, handleClose }) {
               type="password"
               value={formState.password}
               onChange={handleChange}
+              required
             />
+            <Form.Control.Feedback type="invalid">
+              Enter your password.
+            </Form.Control.Feedback>
           </Form.Group>
+          {generalError && !errors?.credentials && (
+            <div className="alert alert-danger py-2" role="alert">
+              {generalError}
+            </div>
+          )}
         </Modal.Body>
         <Modal.Footer>
           <Button variant="outline-primary" size="sm" onClick={handleCancel}>
             Cancel
           </Button>
           <Button type="submit" size="sm" disabled={isLoading}>
-            Login
+            {isLoading ? 'Logging in…' : 'Login'}
           </Button>
         </Modal.Footer>
       </Form>

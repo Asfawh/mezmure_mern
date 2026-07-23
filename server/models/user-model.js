@@ -1,6 +1,5 @@
 import { model, Schema } from 'mongoose';
-import mongooseUniqueValidator from 'mongoose-unique-validator';
-import bcrypt from 'bcrypt'
+import bcrypt from 'bcryptjs'
 
 /* email and password regex */
 const EMAIL_REGEX = new RegExp(/^([\w-\.]+@([\w-]+\.)+[\w-]+)?$/);
@@ -42,11 +41,6 @@ const userSchema = new Schema(
     },
     { timestamps: true }
 );
-
-/* set user validation message */
-userSchema.plugin(mongooseUniqueValidator, {
-    message: 'Email in use. Please log in.'
-});
 
 /* hash password before saving */
 userSchema.pre('save', function(next) {
