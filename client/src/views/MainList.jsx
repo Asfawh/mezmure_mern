@@ -103,9 +103,17 @@ function MainList() {
 
       <section className="library-section" aria-labelledby="library-heading">
         <div className="section-heading">
-          <div>
-            <span className="eyebrow">Browse the collection</span>
-            <h2 id="library-heading">Mezmure library</h2>
+          <div className="section-heading-copy">
+            <img
+              className="section-heading-cross"
+              src="/assets/ethiopian-processional-cross.webp"
+              alt=""
+              aria-hidden="true"
+            />
+            <div>
+              <span className="eyebrow">Browse the collection</span>
+              <h2 id="library-heading">Mezmure library</h2>
+            </div>
           </div>
           <span className="results-label">
             {visibleSongs.length} Mezmure
