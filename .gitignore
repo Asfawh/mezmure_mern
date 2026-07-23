@@ -3,6 +3,7 @@ node_modules/
 *.tfstate
 *.tfstate.*
 *.tfvars
+*.tfplan
 *.zip
 client/dist/
 deployment/build/

@@ -27,6 +27,46 @@ data "aws_route53_zone" "primary" {
   private_zone = false
 }
 
+data "aws_caller_identity" "current" {}
+
+resource "aws_iam_openid_connect_provider" "github" {
+  url = "https://token.actions.githubusercontent.com"
+
+  client_id_list = [
+    "sts.amazonaws.com",
+  ]
+}
+
+data "aws_iam_policy_document" "github_actions_assume_role" {
+  statement {
+    actions = ["sts:AssumeRoleWithWebIdentity"]
+
+    principals {
+      type        = "Federated"
+      identifiers = [aws_iam_openid_connect_provider.github.arn]
+    }
+
+    condition {
+      test     = "StringEquals"
+      variable = "token.actions.githubusercontent.com:aud"
+      values   = ["sts.amazonaws.com"]
+    }
+
+    condition {
+      test     = "StringEquals"
+      variable = "token.actions.githubusercontent.com:sub"
+      values   = ["repo:Asfawh/mezmure_mern:ref:refs/heads/main"]
+    }
+  }
+}
+
+resource "aws_iam_role" "github_actions_deploy" {
+  name                 = "mezmure-github-actions-deploy"
+  description          = "Deploy Mezmure production from the main branch in GitHub Actions"
+  assume_role_policy   = data.aws_iam_policy_document.github_actions_assume_role.json
+  max_session_duration = 3600
+}
+
 resource "aws_s3_bucket" "site" {
   bucket_prefix = "mezmure-site-"
 }
@@ -252,6 +292,55 @@ resource "aws_s3_bucket_policy" "site" {
   policy = data.aws_iam_policy_document.site.json
 }
 
+data "aws_iam_policy_document" "github_actions_deploy" {
+  statement {
+    sid = "ListProductionSite"
+    actions = [
+      "s3:GetBucketLocation",
+      "s3:ListBucket",
+    ]
+    resources = [aws_s3_bucket.site.arn]
+  }
+
+  statement {
+    sid = "UpdateProductionSite"
+    actions = [
+      "s3:DeleteObject",
+      "s3:GetObject",
+      "s3:GetObjectAttributes",
+      "s3:PutObject",
+    ]
+    resources = ["${aws_s3_bucket.site.arn}/*"]
+  }
+
+  statement {
+    sid = "UpdateProductionApi"
+    actions = [
+      "lambda:GetFunction",
+      "lambda:GetFunctionConfiguration",
+      "lambda:UpdateFunctionCode",
+    ]
+    resources = [aws_lambda_function.api.arn]
+  }
+
+  statement {
+    sid = "RefreshProductionCdn"
+    actions = [
+      "cloudfront:CreateInvalidation",
+      "cloudfront:GetInvalidation",
+    ]
+    resources = [
+      "arn:aws:cloudfront::${data.aws_caller_identity.current.account_id}:distribution/${aws_cloudfront_distribution.site.id}",
+    ]
+  }
+}
+
+resource "aws_iam_role_policy" "github_actions_deploy" {
+  name   = "mezmure-production-deploy"
+  role   = aws_iam_role.github_actions_deploy.id
+  policy = data.aws_iam_policy_document.github_actions_deploy.json
+}
+
 resource "aws_route53_record" "apex_a" {
   zone_id = data.aws_route53_zone.primary.zone_id
   name    = local.domain_name
@@ -289,3 +378,4 @@ output "site_bucket" { value = aws_s3_bucket.site.id }
 output "cloudfront_distribution_id" { value = aws_cloudfront_distribution.site.id }
 output "cloudfront_domain" { value = aws_cloudfront_distribution.site.domain_name }
 output "api_endpoint" { value = aws_apigatewayv2_api.api.api_endpoint }
+output "github_actions_role_arn" { value = aws_iam_role.github_actions_deploy.arn }

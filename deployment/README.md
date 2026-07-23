@@ -11,3 +11,16 @@ passed through Terraform would be retained in state. Configure `MONGODB_URI` and
 
 The `.com` redirect should be added only after `mezmure.com` is registered and
 delegated. As of 2026-07-21 the registry reports that the domain is not registered.
+
+## Automatic production deployment
+
+`.github/workflows/deploy-production.yml` deploys every push to `main` and can
+also be run manually from the GitHub Actions page. It builds the Vite client,
+packages and updates the Lambda API, syncs the client to S3, waits for the
+CloudFront invalidation, and verifies the public site and health endpoint.
+
+The workflow uses GitHub OIDC to assume the
+`mezmure-github-actions-deploy` role. The trust policy accepts tokens only from
+`Asfawh/mezmure_mern` on `refs/heads/main`, and its deployment policy is limited
+to the production site bucket, Lambda function, and CloudFront distribution.
+No AWS access keys or application secrets are stored in GitHub.

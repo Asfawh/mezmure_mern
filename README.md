@@ -21,3 +21,9 @@ EOTC Mezmure song library built with React, Express, and MongoDB Atlas.
 
 The client runs at `http://localhost:5173`; Vite proxies `/api` requests to the
 Express API at `http://localhost:8004`.
+
+## Production deployment
+
+Merging to `main` automatically runs the production deployment workflow. It
+uses GitHub OIDC for short-lived AWS credentials, deploys the Lambda API and
+Vite client, refreshes CloudFront, and verifies `mezmure.org`.
