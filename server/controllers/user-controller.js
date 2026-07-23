@@ -1,5 +1,5 @@
-import jwt from "jsonwebtoken";
-import bcrypt from 'bcrypt';
+import { SignJWT } from 'jose';
+import bcrypt from 'bcryptjs';
 import dotenv from 'dotenv';
 import User from "../models/user-model.js";
 
@@ -8,8 +8,14 @@ dotenv.config()
 const JWT_SECRET = process.env.JWT_SECRET;
 
 /* jwt generator */
-function generateToken(id) {
-    return jwt.sign({ id }, JWT_SECRET, { expiresIn: '1d'});
+async function generateToken(id) {
+    if (!JWT_SECRET) throw new Error('JWT_SECRET is required');
+    const secret = new TextEncoder().encode(JWT_SECRET);
+    return new SignJWT({ id: id.toString() })
+        .setProtectedHeader({ alg: 'HS256' })
+        .setIssuedAt()
+        .setExpirationTime('1d')
+        .sign(secret);
 }
 
 /* login errors object */
@@ -19,10 +25,27 @@ const errors = {
     },
 };
 
+function registrationErrors(err) {
+    if (err?.code === 11000) {
+        return { email: { message: 'Email is already registered. Please log in.' } };
+    }
+
+    if (err?.errors) {
+        return Object.fromEntries(
+            Object.entries(err.errors).map(([field, fieldError]) => [
+                field,
+                { message: fieldError.message },
+            ])
+        );
+    }
+
+    return null;
+}
+
 async function registerUser(req, res) {
     try {
         const user = await User.create(req.body);
-        const userToken = generateToken(user._id)
+        const userToken = await generateToken(user._id)
         res.status(201).json({
             token: userToken,
             username: user.username,
@@ -30,8 +53,12 @@ async function registerUser(req, res) {
         });
     }
     catch (err) {
-        console.log(err);
-        res.status(422).json(err);
+        console.error('User registration failed');
+        const fieldErrors = registrationErrors(err);
+        if (fieldErrors) {
+            return res.status(422).json({ errors: fieldErrors });
+        }
+        res.status(500).json({ message: 'Registration could not be completed.' });
     }
 }
 
@@ -51,7 +78,7 @@ async function loginUser(req, res) {
             return res.status(400).json( { errors });
         }
 
-        const userToken = generateToken(user._id);
+        const userToken = await generateToken(user._id);
 
         res.status(200).json({
             token: userToken,

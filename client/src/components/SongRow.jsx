@@ -1,38 +1,37 @@
 import { Link } from 'react-router-dom';
 import SONG_SERVICE from '../services/song.service';
-
-
-import axios from 'axios';
 /* react */
 import { useContext } from 'react';
 
 /* local */
 import { AuthContext } from '../context/AuthContext';
+import { getDisplayedMezmureSource } from '../config/mezmure';
 
 function SongRow({ song, setIsLoaded }) {
-  const baseUrl = 'http://localhost:8004/api/songs';
   const {
     state: { user },
   } = useContext(AuthContext);
-  const removeSong = (id) => {
-    SONG_SERVICE.deleteSongById(id);
-    setSong((prev) => prev.filter((song) => id != song._id));
+  const displayedSource = getDisplayedMezmureSource(song);
+  const removeSong = async (id) => {
+    if (!window.confirm('Remove this Mezmure from the library?')) return;
+    await SONG_SERVICE.deleteSongById(id);
+    setIsLoaded(false);
   };
   return (
     
     <tr>
-      <td className="align-middle">
-        <Link to={`/songs/${song._id}`}>{song.songName} </Link>
+      <td className="align-middle manager-song-title">
+        <Link to={`/songs/${song._id}`}>{song.songName}</Link>
       </td>
       <td className="align-middle">{song.artistName}</td>
-      <td className="align-middle">{song.genre}</td>
-      <td className="align-middle">{song.fileName}</td>
+      <td className="align-middle"><span className="table-genre">{song.genre}</span></td>
+      <td className="align-middle manager-source">{displayedSource}</td>
       {/* <td className="align-middle">{song.pageNumber}</td> */}
 
       <td className="align-middle d-flex gap-2">
         {user && user.id === song.createdBy ?
         (
-          <Link to={`/songs/${song._id}/edit`} className="btn btn-warning  ">
+          <Link to={`/songs/${song._id}/edit`} className="btn btn-sm btn-outline-secondary">
             Update
           </Link>
         ) 
@@ -40,13 +39,13 @@ function SongRow({ song, setIsLoaded }) {
           ''
         )}
         {user && user.id === song.createdBy ? (
-          <Link
-            to={`/songs`}
-            className="btn btn-danger"
+          <button
+            type="button"
+            className="btn btn-sm btn-outline-danger"
             onClick={() => removeSong(song._id)}
           >
             Remove
-          </Link>
+          </button>
         ) : (
           ''
         )}

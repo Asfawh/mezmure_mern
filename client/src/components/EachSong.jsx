@@ -1,55 +1,49 @@
 /* react */
-import { useContext } from 'react';
-
 /* react bootstrap */
 import Card from 'react-bootstrap/Card';
-import Figure from 'react-bootstrap/Figure';
-import styles from '../css/song-list.module.css';
 
 /* react router */
 import { Link } from 'react-router-dom';
+import { getDisplayedMezmureSource } from '../config/mezmure';
 
-/* local */
-import { AuthContext } from '../context/AuthContext';
-
-function EachSong({ song, setIsLoaded }) {
-  const {
-    state: { user },
-  } = useContext(AuthContext);
+function EachSong({ song }) {
+  const displayedSource = getDisplayedMezmureSource(song);
+  const verseLines = song.verses
+    ?.replace(/\r\n?/g, '\n')
+    .split('\n')
+    .map((line) => line.trim())
+    .filter(Boolean);
+  const previewLines = verseLines?.slice(0, 4) || [];
+  const hasMoreLyrics = (verseLines?.length || 0) > previewLines.length;
 
   return (
-    <Card bg="light" text="dark" className="shadow">
-      {/* <img
-        // className={styles.img}
-        src={song.image}
-        alt={song.songName}
-        className="img-fluid mb-3"
-      /> */}
+    <Card className="song-card">
+      <div className="song-card-accent" aria-hidden="true"></div>
       <Card.Body>
-        <Figure>
-          <blockquote>
-            <Card.Text className="mb-4 mt-3 text-center">
-              <strong>{song.songName}</strong>
-            </Card.Text>
-            <Card.Text className="mb-0">
-              <strong>Artist Name:</strong> {song.artistName}
-            </Card.Text>
-            <Card.Text className="mb-0">
-              <strong>Genre:</strong> {song.genre}
-            </Card.Text>
-            <Card.Text className="mb-0">
-              <strong>File Name:</strong> {song.fileName}
-            </Card.Text>
-          </blockquote>
-          <Figure.Caption className="blockquote-footer"></Figure.Caption>
-        </Figure>
+        <div className="song-card-topline">
+          <span className="genre-pill">{song.genre || 'Mezmure'}</span>
+          {song.pageNumber && <span className="page-number">Page {song.pageNumber}</span>}
+        </div>
+        <Card.Title>{song.songName}</Card.Title>
+        <Card.Text className="song-artist">
+          {song.artistName || 'Traditional'}
+        </Card.Text>
+        {displayedSource && (
+          <Card.Text className="song-file">Source: {displayedSource}</Card.Text>
+        )}
+        {previewLines.length > 0 && (
+          <div className="song-preview" aria-label="Lyrics preview">
+            {previewLines.map((line, index) => (
+              <span key={`${line}-${index}`}>{line}</span>
+            ))}
+            {hasMoreLyrics && <span className="song-preview-more" aria-hidden="true">…</span>}
+          </div>
+        )}
       </Card.Body>
-      <Card.Footer className="mb-4 mt-3 text-center">
-        <small>
-          <Link to={`/songs/${song._id}`} className="link-primary">
-            View
-          </Link>
-        </small>
+      <Card.Footer>
+        <Link to={`/songs/${song._id}`} className="song-link">
+          Read Mezmure <span aria-hidden="true">→</span>
+        </Link>
       </Card.Footer>
     </Card>
   );

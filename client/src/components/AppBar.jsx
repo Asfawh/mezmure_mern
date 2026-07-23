@@ -14,29 +14,37 @@ import { LinkContainer } from 'react-router-bootstrap';
 /* local */
 import { AuthContext } from '../context/AuthContext';
 import Search from './Search';
-
-const { SearchBar } = Search;
+import MezmureLogo from './MezmureLogo';
 
 function AppBar() {
   const { state } = useContext(AuthContext);
 
   return (
-    <Navbar variant="dark" bg="primary" expand="lg">
+    <Navbar variant="dark" expand="lg" className="site-navbar">
       <Container>
         <LinkContainer to="/songs">
-          <Navbar.Brand>EOTC MEZMURE </Navbar.Brand>
+          <Navbar.Brand className="brand-lockup">
+            <MezmureLogo />
+            <span>
+              <strong>EOTC Mezmure</strong>
+              <small>Sacred Mezmure &amp; verses</small>
+            </span>
+          </Navbar.Brand>
         </LinkContainer>
         <Navbar.Toggle aria-controls="nav-menu" />
         <Navbar.Collapse id="nav-menu">
-          <Nav className="me-auto">
+          <Nav className="me-auto site-nav-links">
+            <LinkContainer to="/songs">
+              <Nav.Link>Mezmure Library</Nav.Link>
+            </LinkContainer>
             {state.user && (
               <LinkContainer to="/songs/new">
-                <Nav.Link>Create / View</Nav.Link>
+                <Nav.Link>Add Mezmure</Nav.Link>
               </LinkContainer>
             )}
           </Nav>
+          <Search />
         </Navbar.Collapse>
-        <Search />
       </Container>
     </Navbar>
   );

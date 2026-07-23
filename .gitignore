@@ -1,0 +1,11 @@
+node_modules/
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfvars
+*.zip
+client/dist/
+deployment/build/
+.env
+.env.*
+!.env.example

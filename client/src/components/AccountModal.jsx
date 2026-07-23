@@ -10,7 +10,8 @@ function AccountModal({ title, options, handleSelect }) {
     <DropdownButton
       title={title}
       size="sm"
-      variant="dark"
+      variant="outline-light"
+      className="account-menu"
       onSelect={handleSelect}>
       {options.map((option) => (
         <Dropdown.Item key={option} eventKey={option}>

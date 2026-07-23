@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 export const http = axios.create({
-  baseURL: 'http://localhost:8004/api/songs',
+  baseURL: `${import.meta.env.VITE_API_BASE_URL || ''}/api/songs`,
 });
 
 const SONG_SERVICE = {
@@ -37,11 +37,11 @@ const SONG_SERVICE = {
       const res = await http.get(`/search?query=${searchQuery}`);
       console.log('Search Results:', res.data); // Log the entire response array
       if (res.data.length === 0) {
-        throw new Error('No songs found');
+        throw new Error('No Mezmure found');
       }
       return res.data[0];
     } catch (err) {
-      console.error('Error fetching song:', err);
+      console.error('Error fetching Mezmure:', err);
       throw err;
     }
   },
