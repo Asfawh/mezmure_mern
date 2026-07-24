@@ -38,9 +38,14 @@ function AppBar() {
               <Nav.Link>Mezmure Library</Nav.Link>
             </LinkContainer>
             {state.user && (
-              <LinkContainer to="/songs/new">
-                <Nav.Link>Add Mezmure</Nav.Link>
-              </LinkContainer>
+              <>
+                <LinkContainer to="/favorites">
+                  <Nav.Link>My Favorites</Nav.Link>
+                </LinkContainer>
+                <LinkContainer to="/songs/new">
+                  <Nav.Link>Add Mezmure</Nav.Link>
+                </LinkContainer>
+              </>
             )}
           </Nav>
           <Search />

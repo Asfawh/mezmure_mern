@@ -4,6 +4,16 @@ export const http = axios.create({
   baseURL: `${import.meta.env.VITE_API_BASE_URL || ''}/api/songs`,
 });
 
+function authConfig(token) {
+  if (!token) return {};
+
+  return {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+}
+
 const SONG_SERVICE = {
   createSong: async (songData) => {
     try {
@@ -23,9 +33,9 @@ const SONG_SERVICE = {
     }
   },
 
-  getAllSong: async () => {
+  getAllSong: async (token) => {
     try {
-      const res = await http.get('/');
+      const res = await http.get('/', authConfig(token));
       return res.data;
     } catch (err) {
       throw err;

@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import dbConnect from './config/mongoose.config.js';
 import songRoute from './routes/song.routes.js';
 import userRoute from "./routes/user-routes.js";
+import reactionRoute from './routes/reaction.routes.js';
 import serverless from 'serverless-http';
 
 //pulling env vars
@@ -28,6 +29,7 @@ async function ensureDatabase(_req, _res, next) {
 
 app.use('/api/songs', ensureDatabase, songRoute);
 app.use('/api/users', ensureDatabase, userRoute);
+app.use('/api/reactions', ensureDatabase, reactionRoute);
 
 app.use((err, _req, res, _next) => {
   console.error(err);
