@@ -5,7 +5,15 @@ import { attachReactionData } from '../services/reaction.service.js';
 //Add a song to the collection in our Mongo database using a POST HTTP Verb.
 async function createSong(req, res) {
   try {
-    const newSong = await Song.create(req.body);
+    const lastNumberedSong = await Song.findOne({ pageNumber: { $type: 'number' } })
+      .sort({ pageNumber: -1 })
+      .select({ pageNumber: 1 })
+      .lean();
+    const pageNumber = (lastNumberedSong?.pageNumber || 0) + 1;
+    const newSong = await Song.create({
+      ...req.body,
+      pageNumber,
+    });
     res.status(201).json(newSong);
   } catch (error) {
     console.log(error);
@@ -16,7 +24,9 @@ async function createSong(req, res) {
 //Retrieve all song from the collection.
 async function getAllSong(req, res) {
   try {
-    const allSong = await Song.find().lean();
+    const allSong = await Song.find()
+      .sort({ pageNumber: 1, createdAt: 1, _id: 1 })
+      .lean();
     const songsWithReactions = await attachReactionData(allSong, req.userId);
     res.status(200).json(songsWithReactions);
   } catch (error) {
@@ -72,9 +82,10 @@ async function updateOneSong(req, res) {
     runValidators: true,
   };
   try {
+    const { pageNumber: _pageNumber, ...updates } = req.body;
     const updatedSong = await Song.findByIdAndUpdate(
       req.params.id,
-      req.body,
+      updates,
       options
     );
     res.status(200).json(updatedSong);

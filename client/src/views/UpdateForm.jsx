@@ -140,19 +140,6 @@ const UpdateForm = () => {
             />
           </div>
           <div className="mb-3">
-            <label htmlFor="pageNumber" className="form-label">
-              PageNumber (Optional):
-            </label>
-            <input
-              type="number"
-              name="pageNumber"
-              id="pageNumber"
-              value={song.pageNumber}
-              className="form-control"
-              onChange={handleChange}
-            />
-          </div>
-          <div className="mb-3">
             <label htmlFor="source" className="form-label">
               Source attribution:
             </label>

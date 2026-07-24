@@ -17,7 +17,14 @@ const SongSchema = new Schema(
       type: String,
       maxLength: [200, 'Source attribution must be less than 200 characters long.'],
     },
-    pageNumber: Number,
+    pageNumber: {
+      type: Number,
+      min: [1, 'Page number must be at least 1.'],
+      validate: {
+        validator: Number.isInteger,
+        message: 'Page number must be a whole number.',
+      },
+    },
 
     genre: {
       type: String,
