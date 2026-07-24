@@ -3,8 +3,7 @@ import SONG_SERVICE from '../services/song.service';
 import { AuthContext } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { MEZMURE_SOURCE } from '../config/mezmure';
-
-const songGenre = ['Yensiha', 'Woreb', 'Chebchebo'];
+import { MEZMURE_GENRES } from '../config/genres';
 
 const CreateForm = ({ setIsLoaded }) => {
   const { state } = useContext(AuthContext);
@@ -13,7 +12,7 @@ const CreateForm = ({ setIsLoaded }) => {
     artistName: '',
     fileName: MEZMURE_SOURCE,
     verses: '',
-    genre: songGenre[0],
+    genre: MEZMURE_GENRES[0],
     pageNumber: '',
     createdBy: state.user?.id,
   };
@@ -126,7 +125,7 @@ const CreateForm = ({ setIsLoaded }) => {
               onChange={handleChange}
               required
             >
-              {songGenre.map((genreType) => (
+              {MEZMURE_GENRES.map((genreType) => (
                 <option key={genreType} value={genreType}>
                   {genreType}
                 </option>

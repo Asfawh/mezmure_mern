@@ -1,4 +1,5 @@
 import { model, Schema } from 'mongoose';
+import { MEZMURE_GENRES } from '../config/genres.js';
 const SongSchema = new Schema(
   {
     songName: {
@@ -17,6 +18,10 @@ const SongSchema = new Schema(
     genre: {
       type: String,
       required: [true, 'Genre is required.'],
+      enum: {
+        values: MEZMURE_GENRES,
+        message: 'Choose a valid Mezmure genre.',
+      },
     },
     verses: {
       type: String,
