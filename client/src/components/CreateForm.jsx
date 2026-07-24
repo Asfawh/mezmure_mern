@@ -12,7 +12,6 @@ const CreateForm = ({ setIsLoaded }) => {
     source: '',
     verses: '',
     genre: MEZMURE_GENRES[0],
-    pageNumber: '',
     createdBy: state.user?.id,
   };
 
@@ -167,21 +166,8 @@ const CreateForm = ({ setIsLoaded }) => {
             />
             <div className="invalid-feedback">Enter the Mezmure verses.</div>
           </div>
-          <div className="mb-3">
-            <label htmlFor="pageNumber" className="form-label">
-              Page number
-            </label>
-            <input
-              type="number"
-              name="pageNumber"
-              id="pageNumber"
-              value={song.pageNumber}
-              className="form-control"
-              onChange={handleChange}
-            />
-          </div>
           <div className="editor-actions">
-            <span>Your Mezmure will be visible in the public library.</span>
+            <span>Your Mezmure will receive the next page number automatically.</span>
             <button type="submit" className="btn btn-primary" disabled={isSubmitting}>
               {isSubmitting ? 'Adding Mezmure…' : 'Add to library'}
             </button>
