@@ -29,7 +29,9 @@ function EachSong({
       <Card.Body>
         <div className="song-card-topline">
           <span className="genre-pill">{song.genre || 'Mezmure'}</span>
-          {song.pageNumber && <span className="page-number">Page {song.pageNumber}</span>}
+          {song.pageNumber && (
+            <span className="mezmure-number">Mezmure No. {song.pageNumber}</span>
+          )}
         </div>
         <Card.Title>{song.songName}</Card.Title>
         <Card.Text className="song-artist">
