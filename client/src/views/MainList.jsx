@@ -9,12 +9,15 @@ import { AuthContext } from '../context/AuthContext';
 import EachSong from '../components/EachSong';
 import styles from '../css/song-list.module.css';
 import SONG_SERVICE from '../services/song.service';
+import REACTION_SERVICE from '../services/reaction.service';
 import { getDisplayedMezmureSource } from '../config/mezmure';
 
 function MainList() {
   const [songs, setSongs] = useState([]);
   const [isLoaded, setIsLoaded] = useState(false);
   const [loadError, setLoadError] = useState('');
+  const [reactionError, setReactionError] = useState('');
+  const [busySongId, setBusySongId] = useState(null);
   const [searchParams, setSearchParams] = useSearchParams();
   const [searchValue, setSearchValue] = useState(searchParams.get('query') || '');
   const {
@@ -22,17 +25,26 @@ function MainList() {
   } = useContext(AuthContext);
 
   useEffect(() => {
-    SONG_SERVICE.getAllSong()
+    let active = true;
+    setIsLoaded(false);
+
+    SONG_SERVICE.getAllSong(user?.token)
       .then((res) => {
+        if (!active) return;
         setSongs(res);
         setIsLoaded(true);
         setLoadError('');
       })
       .catch(() => {
+        if (!active) return;
         setLoadError('The Mezmure library could not be loaded. Please try again.');
         setIsLoaded(true);
       });
-  }, []);
+
+    return () => {
+      active = false;
+    };
+  }, [user?.token]);
 
   const query = searchParams.get('query')?.trim().toLowerCase() || '';
   const visibleSongs = useMemo(() => songs.filter((song) => {
@@ -61,6 +73,30 @@ function MainList() {
   const clearSearch = () => {
     setSearchValue('');
     setSearchParams({});
+  };
+
+  const handleReaction = async (song, kind) => {
+    if (!user?.token || busySongId) return;
+
+    const nextKind = song.userReaction === kind ? null : kind;
+    setBusySongId(song._id);
+    setReactionError('');
+
+    try {
+      const updatedSong = await REACTION_SERVICE.setReaction(
+        song._id,
+        nextKind,
+        user.token
+      );
+
+      setSongs((current) => current.map((item) => (
+        item._id === song._id ? updatedSong : item
+      )));
+    } catch {
+      setReactionError('Your reaction could not be saved. Please try again.');
+    } finally {
+      setBusySongId(null);
+    }
   };
 
   let subtitle = 'Login or register for more.';
@@ -142,6 +178,7 @@ function MainList() {
           </p>
         )}
 
+        {reactionError && <div className="alert alert-danger">{reactionError}</div>}
         {!isLoaded && <div className="empty-state">Loading the Mezmure library…</div>}
         {loadError && <div className="alert alert-danger">{loadError}</div>}
         {isLoaded && !loadError && visibleSongs.length === 0 && (
@@ -152,7 +189,13 @@ function MainList() {
         )}
         <div className={styles.grid}>
           {visibleSongs.map((song) => (
-            <EachSong key={song._id} song={song} />
+            <EachSong
+              key={song._id}
+              song={song}
+              user={user}
+              onReaction={handleReaction}
+              reactionBusy={Boolean(busySongId)}
+            />
           ))}
         </div>
       </section>

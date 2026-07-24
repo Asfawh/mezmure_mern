@@ -1,4 +1,6 @@
 import Song from '../models/song.model.js';
+import Reaction from '../models/reaction.model.js';
+import { attachReactionData } from '../services/reaction.service.js';
 
 //Add a song to the collection in our Mongo database using a POST HTTP Verb.
 async function createSong(req, res) {
@@ -14,8 +16,9 @@ async function createSong(req, res) {
 //Retrieve all song from the collection.
 async function getAllSong(req, res) {
   try {
-    const allSong = await Song.find();
-    res.status(200).json(allSong);
+    const allSong = await Song.find().lean();
+    const songsWithReactions = await attachReactionData(allSong, req.userId);
+    res.status(200).json(songsWithReactions);
   } catch (error) {
     console.log(error);
     res.status(400).json(error);
@@ -26,8 +29,14 @@ async function getAllSong(req, res) {
 async function getOneSong(req, res) {
   try {
     const { id } = req.params;
-    const foundSong = await Song.findById(id);
-    res.status(200).json(foundSong);
+    const foundSong = await Song.findById(id).lean();
+
+    if (!foundSong) {
+      return res.status(404).json({ message: 'Mezmure not found.' });
+    }
+
+    const [songWithReactions] = await attachReactionData([foundSong], req.userId);
+    res.status(200).json(songWithReactions);
   } catch (error) {
     console.log(error);
     res.status(400).json(error);
@@ -79,6 +88,7 @@ async function updateOneSong(req, res) {
 async function deleteOneSong(req, res) {
   try {
     const deletedSong = await Song.findByIdAndDelete(req.params.id);
+    await Reaction.deleteMany({ song: req.params.id });
     res.status(200).json(deletedSong);
   } catch (error) {
     console.log(error);

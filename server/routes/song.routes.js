@@ -7,15 +7,16 @@ import {
   deleteOneSong,
   searchSong,
 } from '../controllers/song.controller.js';
+import { optionalAuth } from '../middleware/auth.middleware.js';
 
 const router = Router();
 
-router.route('/').get(getAllSong).post(createSong);
+router.route('/').get(optionalAuth, getAllSong).post(createSong);
 
 // router.route('/search').get(searchSong);
 router
   .route('/:id')
-  .get(getOneSong)
+  .get(optionalAuth, getOneSong)
   .put(updateOneSong)
   .delete(deleteOneSong);
 
