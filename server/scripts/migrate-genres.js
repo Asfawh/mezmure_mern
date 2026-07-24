@@ -2,7 +2,11 @@ import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 
 import dbConnect from '../config/mongoose.config.js';
-import { GENRE_BY_SONG_NAME } from '../config/genres.js';
+import {
+  GENRE_BY_SONG_NAME,
+  LEGACY_GENRE_MAP,
+  MEZMURE_GENRES,
+} from '../config/genres.js';
 import Song from '../models/song.model.js';
 
 dotenv.config();
@@ -12,21 +16,25 @@ async function migrateGenres() {
 
   const dryRun = process.argv.includes('--dry-run');
   const songs = await Song.find({}, { songName: 1, genre: 1 }).lean();
-  const targets = songs.filter((song) => (
-    GENRE_BY_SONG_NAME.has(song.songName?.trim())
-  ));
-  const matchedNames = new Set(targets.map((song) => song.songName.trim()));
-  const missingNames = [...GENRE_BY_SONG_NAME.keys()].filter((name) => (
-    !matchedNames.has(name)
-  ));
 
-  if (targets.length !== GENRE_BY_SONG_NAME.size || missingNames.length > 0) {
+  const resolvedSongs = songs.map((song) => {
+    const currentGenre = song.genre?.trim();
+    const songName = song.songName?.trim();
+    const genre = MEZMURE_GENRES.includes(currentGenre)
+      ? currentGenre
+      : GENRE_BY_SONG_NAME.get(songName) || LEGACY_GENRE_MAP.get(currentGenre);
+
+    return { ...song, currentGenre, genre };
+  });
+  const unresolved = resolvedSongs.filter((song) => !song.genre);
+
+  if (unresolved.length > 0) {
     throw new Error(
-      `Expected ${GENRE_BY_SONG_NAME.size} unique Mezmure; found ${targets.length}. `
-      + `Missing: ${missingNames.join(', ') || 'none'}.`
+      `Could not resolve a genre for: ${unresolved.map((song) => song.songName).join(', ')}.`
     );
   }
 
+  const targets = resolvedSongs.filter((song) => song.currentGenre !== song.genre);
   let matched = targets.length;
   let modified = 0;
 
@@ -37,7 +45,7 @@ async function migrateGenres() {
           filter: { _id: song._id },
           update: {
             $set: {
-              genre: GENRE_BY_SONG_NAME.get(song.songName.trim()),
+              genre: song.genre,
             },
           },
         },
@@ -48,14 +56,14 @@ async function migrateGenres() {
     modified = result.modifiedCount;
   }
 
-  const counts = targets.reduce((summary, song) => {
-    const genre = GENRE_BY_SONG_NAME.get(song.songName.trim());
-    summary[genre] = (summary[genre] || 0) + 1;
+  const counts = resolvedSongs.reduce((summary, song) => {
+    summary[song.genre] = (summary[song.genre] || 0) + 1;
     return summary;
   }, {});
 
   console.log(JSON.stringify({
     mode: dryRun ? 'dry-run' : 'write',
+    scanned: songs.length,
     matched,
     modified,
     categories: counts,

@@ -13,6 +13,10 @@ const SongSchema = new Schema(
     },
     artistName: String,
     fileName: String,
+    source: {
+      type: String,
+      maxLength: [200, 'Source attribution must be less than 200 characters long.'],
+    },
     pageNumber: Number,
 
     genre: {

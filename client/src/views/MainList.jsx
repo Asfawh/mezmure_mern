@@ -133,7 +133,7 @@ function MainList() {
         <p className="hero-account-note">{subtitle}</p>
         <div className="hero-stats" aria-label="Library summary">
           <span><strong>{songs.length}</strong> Mezmure in the library</span>
-          <span><strong>4</strong> traditional categories</span>
+          <span><strong>5</strong> traditional categories</span>
         </div>
       </section>
 

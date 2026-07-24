@@ -2,7 +2,6 @@ import { useContext, useEffect, useState } from 'react';
 import SONG_SERVICE from '../services/song.service';
 import { AuthContext } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
-import { MEZMURE_SOURCE } from '../config/mezmure';
 import { MEZMURE_GENRES } from '../config/genres';
 
 const CreateForm = ({ setIsLoaded }) => {
@@ -10,7 +9,7 @@ const CreateForm = ({ setIsLoaded }) => {
   const initialSong = {
     songName: '',
     artistName: '',
-    fileName: MEZMURE_SOURCE,
+    source: '',
     verses: '',
     genre: MEZMURE_GENRES[0],
     pageNumber: '',
@@ -133,19 +132,20 @@ const CreateForm = ({ setIsLoaded }) => {
             </select>
           </div>
           <div className="mb-3">
-            {errors.fileName && (
-              <p className="error">{errors.fileName.message}</p>
+            {errors.source && (
+              <p className="error">{errors.source.message}</p>
             )}
-            <label htmlFor="fileName" className="form-label">
+            <label htmlFor="source" className="form-label">
               Source attribution
             </label>
             <input
               type="text"
-              name="fileName"
-              id="fileName"
+              name="source"
+              id="source"
               className="form-control"
-              value={song.fileName}
-              readOnly
+              value={song.source}
+              onChange={handleChange}
+              placeholder="Church, choir, book, website, or other source"
             />
           </div>
 
@@ -180,19 +180,6 @@ const CreateForm = ({ setIsLoaded }) => {
               onChange={handleChange}
             />
           </div>
-          {/* <div className="mb-3">
-            <label htmlFor="fileName" className="form-label">
-              File Name (Optional):
-            </label>
-            <input
-              type="text"
-              name="fileName"
-              id="fileName"
-              value={song.fileName}
-              className="form-control"
-              onChange={handleChange}
-            />
-          </div> */}
           <div className="editor-actions">
             <span>Your Mezmure will be visible in the public library.</span>
             <button type="submit" className="btn btn-primary" disabled={isSubmitting}>

@@ -4,7 +4,6 @@ import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import SONG_SERVICE from '../services/song.service';
 import { AuthContext } from '../context/AuthContext';
-import { MEZMURE_SOURCE } from '../config/mezmure';
 import { MEZMURE_GENRES } from '../config/genres';
 
 const UpdateForm = () => {
@@ -12,7 +11,7 @@ const UpdateForm = () => {
   const initialSong = {
     songName: '',
     artistName: '',
-    fileName: MEZMURE_SOURCE,
+    source: '',
     verses: '',
     genre: '',
     createdBy: state.user?.id,
@@ -28,7 +27,7 @@ const UpdateForm = () => {
       navigate('/songs');
     }
     SONG_SERVICE.getSongById(id)
-      .then((res) => setSong({ ...res, fileName: MEZMURE_SOURCE }))
+      .then((res) => setSong({ ...res, source: res.source || '' }))
       .catch((err) => console.log(err));
   }, [id]);
 
@@ -154,16 +153,17 @@ const UpdateForm = () => {
             />
           </div>
           <div className="mb-3">
-            <label htmlFor="fileName" className="form-label">
+            <label htmlFor="source" className="form-label">
               Source attribution:
             </label>
             <input
               type="text"
-              name="fileName"
-              id="fileName"
-              value={MEZMURE_SOURCE}
+              name="source"
+              id="source"
+              value={song.source}
               className="form-control"
-              readOnly
+              onChange={handleChange}
+              placeholder="Church, choir, book, website, or other source"
             />
           </div>
           <div className="text-end">
