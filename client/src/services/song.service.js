@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { withMezmureGenre, withMezmureGenres } from '../config/genres';
 
 export const http = axios.create({
   baseURL: `${import.meta.env.VITE_API_BASE_URL || ''}/api/songs`,
@@ -18,7 +19,7 @@ const SONG_SERVICE = {
   createSong: async (songData) => {
     try {
       const res = await http.post('/', songData);
-      return res.data;
+      return withMezmureGenre(res.data);
     } catch (err) {
       throw err;
     }
@@ -27,7 +28,7 @@ const SONG_SERVICE = {
   getSongById: async (id) => {
     try {
       const res = await http.get(`/${id}`);
-      return res.data;
+      return withMezmureGenre(res.data);
     } catch (err) {
       throw err;
     }
@@ -36,7 +37,7 @@ const SONG_SERVICE = {
   getAllSong: async (token) => {
     try {
       const res = await http.get('/', authConfig(token));
-      return res.data;
+      return withMezmureGenres(res.data);
     } catch (err) {
       throw err;
     }
@@ -49,7 +50,7 @@ const SONG_SERVICE = {
       if (res.data.length === 0) {
         throw new Error('No Mezmure found');
       }
-      return res.data[0];
+      return withMezmureGenre(res.data[0]);
     } catch (err) {
       console.error('Error fetching Mezmure:', err);
       throw err;
@@ -59,7 +60,7 @@ const SONG_SERVICE = {
   updateSongById: async (id, songData) => {
     try {
       const res = await http.put(`/${songData._id}`, songData);
-      return res.data;
+      return withMezmureGenre(res.data);
     } catch (err) {
       throw err;
     }

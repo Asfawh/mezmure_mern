@@ -5,8 +5,8 @@ import axios from 'axios';
 import SONG_SERVICE from '../services/song.service';
 import { AuthContext } from '../context/AuthContext';
 import { MEZMURE_SOURCE } from '../config/mezmure';
+import { MEZMURE_GENRES } from '../config/genres';
 
-const songGenre = ['Yensiha', 'Woreb', 'Chebchebo'];
 const UpdateForm = () => {
   const { state } = useContext(AuthContext);
   const initialSong = {
@@ -101,7 +101,7 @@ const UpdateForm = () => {
               value={song.genre}
               onChange={handleChange}
             >
-              {songGenre.map((genreType) => (
+              {MEZMURE_GENRES.map((genreType) => (
                 <option key={genreType} value={genreType}>
                   {genreType}
                 </option>
