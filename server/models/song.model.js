@@ -19,10 +19,10 @@ const SongSchema = new Schema(
     },
     pageNumber: {
       type: Number,
-      min: [1, 'Page number must be at least 1.'],
+      min: [1, 'Mezmure number must be at least 1.'],
       validate: {
         validator: Number.isInteger,
-        message: 'Page number must be a whole number.',
+        message: 'Mezmure number must be a whole number.',
       },
     },
 

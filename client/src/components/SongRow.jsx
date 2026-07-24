@@ -26,8 +26,6 @@ function SongRow({ song, setIsLoaded }) {
       <td className="align-middle">{song.artistName}</td>
       <td className="align-middle"><span className="table-genre">{song.genre}</span></td>
       <td className="align-middle manager-source">{displayedSource}</td>
-      {/* <td className="align-middle">{song.pageNumber}</td> */}
-
       <td className="align-middle d-flex gap-2">
         {user && user.id === song.createdBy ?
         (

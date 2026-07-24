@@ -167,7 +167,7 @@ const CreateForm = ({ setIsLoaded }) => {
             <div className="invalid-feedback">Enter the Mezmure verses.</div>
           </div>
           <div className="editor-actions">
-            <span>Your Mezmure will receive the next page number automatically.</span>
+            <span>Your Mezmure will receive the next Mezmure number automatically.</span>
             <button type="submit" className="btn btn-primary" disabled={isSubmitting}>
               {isSubmitting ? 'Adding Mezmure…' : 'Add to library'}
             </button>
