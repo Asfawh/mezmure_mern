@@ -37,6 +37,10 @@ async function authenticate(req, res, next, required) {
     req.userId = payload.id;
     return next();
   } catch {
+    if (!required) {
+      return next();
+    }
+
     return res.status(401).json({ message: 'Your login has expired. Please log in again.' });
   }
 }
