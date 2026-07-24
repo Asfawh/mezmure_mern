@@ -124,7 +124,7 @@ a:hover { color: var(--wine); }
   border-radius: 28px;
   background:
     linear-gradient(90deg, rgba(255,253,248,0.99) 0%, rgba(255,253,248,0.94) 34%, rgba(255,253,248,0.28) 66%, rgba(45,13,23,0.08) 100%),
-    url('/assets/ethiopian-mezmure-hero.png') center right / cover no-repeat;
+    url('/assets/ethiopian-mezmure-hero-female-v3.png') center right / cover no-repeat;
   box-shadow: 0 24px 60px rgba(77, 45, 49, 0.1);
 }
 .hero-section > * { position: relative; z-index: 1; }
@@ -620,7 +620,7 @@ a:hover { color: var(--wine); }
     justify-content: flex-end;
     background:
       linear-gradient(0deg, rgba(255,253,248,0.98) 0%, rgba(255,253,248,0.9) 42%, rgba(45,13,23,0.04) 72%),
-      url('/assets/ethiopian-mezmure-hero.png') 67% center / cover no-repeat;
+      url('/assets/ethiopian-mezmure-hero-female-v3.png') 67% center / cover no-repeat;
   }
   .section-heading { align-items: start; flex-direction: column; }
   .section-heading-cross { width: 52px; height: 70px; }
