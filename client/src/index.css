@@ -313,10 +313,14 @@ a:hover { color: var(--wine); }
 }
 .reaction-row {
   display: flex;
+  width: 100%;
   flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
   gap: 0.55rem;
   margin-top: auto;
   padding-top: 1.15rem;
+  border-top: 1px solid #eee5d9;
 }
 .reaction-button {
   display: inline-flex;
@@ -365,9 +369,12 @@ a:hover { color: var(--wine); }
 }
 .reaction-button:disabled { cursor: not-allowed; opacity: 0.72; }
 .reaction-signin-note {
+  display: block;
+  width: 100%;
   margin-top: 0.55rem;
   color: #97888a;
   font-size: 0.7rem;
+  text-align: center;
 }
 .song-card .card-footer { padding: 0 1.5rem 1.4rem; border: 0; background: transparent; }
 .song-link { display: inline-flex; gap: 0.45rem; align-items: center; color: var(--wine); font-size: 0.88rem; font-weight: 800; text-decoration: none; }
