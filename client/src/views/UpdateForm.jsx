@@ -41,12 +41,15 @@ const UpdateForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    SONG_SERVICE.updateSongById(id, song)
+    SONG_SERVICE.updateSongById(id, {
+      ...song,
+      songName: song.songName.trim(),
+    })
       .then((res) => {
         console.log(res.data);
         navigate('/songs');
       })
-      .catch((err) => setErrors(err.response.data.errors));
+      .catch((err) => setErrors(err.response?.data?.errors || {}));
   };
 
   return (

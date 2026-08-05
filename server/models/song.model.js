@@ -5,6 +5,7 @@ const SongSchema = new Schema(
     songName: {
       type: String,
       required: [true, 'Mezmure/Song name is required.'],
+      trim: true,
       minLength: [2, 'Mezmure/Song name must be at least 2 characters long.'],
       maxLength: [
         50,
