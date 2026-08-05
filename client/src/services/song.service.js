@@ -25,6 +25,16 @@ const SONG_SERVICE = {
     }
   },
 
+  checkSongNameAvailability: async (songName, excludeId) => {
+    const res = await http.get('/name-availability', {
+      params: {
+        name: songName,
+        ...(excludeId ? { excludeId } : {}),
+      },
+    });
+    return res.data;
+  },
+
   getSongById: async (id) => {
     try {
       const res = await http.get(`/${id}`);

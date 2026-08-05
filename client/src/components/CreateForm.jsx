@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import SONG_SERVICE from '../services/song.service';
 import { AuthContext } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
@@ -20,7 +20,9 @@ const CreateForm = ({ setIsLoaded }) => {
   const [errors, setErrors] = useState({});
   const [validated, setValidated] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isCheckingName, setIsCheckingName] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
+  const nameCheckSequence = useRef(0);
 
   useEffect(() => {
     if (!state.user) {
@@ -34,6 +36,62 @@ const CreateForm = ({ setIsLoaded }) => {
       ...prev,
       [name]: value,
     }));
+
+    if (name === 'songName') {
+      nameCheckSequence.current += 1;
+      setErrors((previousErrors) => {
+        const nextErrors = { ...previousErrors };
+        delete nextErrors.songName;
+        return nextErrors;
+      });
+    }
+  };
+
+  const validateSongName = async (value) => {
+    const trimmedName = value.trim();
+    const checkSequence = ++nameCheckSequence.current;
+
+    setSong((previousSong) => ({
+      ...previousSong,
+      songName: trimmedName,
+    }));
+
+    if (trimmedName.length < 2) {
+      setErrors((previousErrors) => ({
+        ...previousErrors,
+        songName: { message: 'Enter a Mezmure name of at least two characters.' },
+      }));
+      return false;
+    }
+
+    setIsCheckingName(true);
+
+    try {
+      const result = await SONG_SERVICE.checkSongNameAvailability(trimmedName);
+
+      if (checkSequence !== nameCheckSequence.current) return false;
+
+      if (result.exists) {
+        setErrors((previousErrors) => ({
+          ...previousErrors,
+          songName: { message: result.message || 'Mezmure already exists.' },
+        }));
+        return false;
+      }
+
+      setErrors((previousErrors) => {
+        const nextErrors = { ...previousErrors };
+        delete nextErrors.songName;
+        return nextErrors;
+      });
+      return true;
+    } catch {
+      return true;
+    } finally {
+      if (checkSequence === nameCheckSequence.current) {
+        setIsCheckingName(false);
+      }
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -44,19 +102,32 @@ const CreateForm = ({ setIsLoaded }) => {
       return;
     }
 
-    setValidated(true);
     setIsSubmitting(true);
-    setErrors({});
     setSuccessMessage('');
 
     try {
-      await SONG_SERVICE.createSong(song);
+      const trimmedSong = { ...song, songName: song.songName.trim() };
+      const isNameAvailable = await validateSongName(trimmedSong.songName);
+
+      if (!isNameAvailable) return;
+
+      setValidated(true);
+      setErrors({});
+      await SONG_SERVICE.createSong(trimmedSong);
       setSong(initialSong);
       setValidated(false);
       setSuccessMessage('Mezmure added to the library.');
       setIsLoaded(false);
     } catch (err) {
-      setErrors(err.response?.data?.errors || {});
+      const responseErrors = err.response?.data?.errors || {};
+      setErrors(
+        err.response?.data?.message && !responseErrors.songName
+          ? {
+              ...responseErrors,
+              songName: { message: err.response.data.message },
+            }
+          : responseErrors
+      );
     } finally {
       setIsSubmitting(false);
     }
@@ -75,9 +146,6 @@ const CreateForm = ({ setIsLoaded }) => {
         {successMessage && <div className="alert alert-success">{successMessage}</div>}
         <form noValidate className={validated ? 'was-validated' : ''} onSubmit={handleSubmit}>
           <div className="mb-3">
-            {errors.songName && (
-              <p className="error">{errors.songName.message}</p>
-            )}
             <label htmlFor="songName" className="form-label">
               Mezmure name *
             </label>
@@ -86,12 +154,21 @@ const CreateForm = ({ setIsLoaded }) => {
               name="songName"
               id="songName"
               value={song.songName}
-              className="form-control"
+              className={`form-control ${errors.songName ? 'is-invalid' : ''}`}
               onChange={handleChange}
+              onBlur={(event) => validateSongName(event.target.value)}
+              aria-invalid={Boolean(errors.songName)}
+              aria-describedby="songNameFeedback"
               required
               minLength={2}
             />
-            <div className="invalid-feedback">Enter a Mezmure name of at least two characters.</div>
+            <div
+              id="songNameFeedback"
+              className={`invalid-feedback ${errors.songName ? 'd-block' : ''}`}
+            >
+              {errors.songName?.message || 'Enter a Mezmure name of at least two characters.'}
+            </div>
+            {isCheckingName && <div className="form-text">Checking the Mezmure library…</div>}
           </div>
 
           <div className="mb-3">

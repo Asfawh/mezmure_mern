@@ -2,9 +2,71 @@ import Song from '../models/song.model.js';
 import Reaction from '../models/reaction.model.js';
 import { attachReactionData } from '../services/reaction.service.js';
 
+const DUPLICATE_MEZMURE_MESSAGE = 'Mezmure already exists.';
+
+function trimSongName(value) {
+  return typeof value === 'string' ? value.trim() : value;
+}
+
+async function findDuplicateSong(songName, excludeId) {
+  const trimmedName = trimSongName(songName);
+
+  if (!trimmedName) return null;
+
+  const query = {
+    $expr: {
+      $eq: [
+        {
+          $toLower: {
+            $trim: { input: '$songName' },
+          },
+        },
+        trimmedName.toLocaleLowerCase(),
+      ],
+    },
+  };
+
+  if (excludeId) {
+    query._id = { $ne: excludeId };
+  }
+
+  return Song.findOne(query).select({ _id: 1, songName: 1 }).lean();
+}
+
+function sendDuplicateSongError(res) {
+  return res.status(409).json({
+    message: DUPLICATE_MEZMURE_MESSAGE,
+    errors: {
+      songName: { message: DUPLICATE_MEZMURE_MESSAGE },
+    },
+  });
+}
+
+async function checkSongNameAvailability(req, res) {
+  try {
+    const songName = trimSongName(req.query.name);
+    const duplicateSong = await findDuplicateSong(songName, req.query.excludeId);
+
+    res.status(200).json({
+      exists: Boolean(duplicateSong),
+      message: duplicateSong ? DUPLICATE_MEZMURE_MESSAGE : '',
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(400).json(error);
+  }
+}
+
 //Add a song to the collection in our Mongo database using a POST HTTP Verb.
 async function createSong(req, res) {
   try {
+    const songName = trimSongName(req.body.songName);
+    const duplicateSong = await findDuplicateSong(songName);
+
+    if (duplicateSong) {
+      return sendDuplicateSongError(res);
+    }
+
     const lastNumberedSong = await Song.findOne({ pageNumber: { $type: 'number' } })
       .sort({ pageNumber: -1 })
       .select({ pageNumber: 1 })
@@ -12,6 +74,7 @@ async function createSong(req, res) {
     const pageNumber = (lastNumberedSong?.pageNumber || 0) + 1;
     const newSong = await Song.create({
       ...req.body,
+      songName,
       pageNumber,
     });
     res.status(201).json(newSong);
@@ -83,6 +146,14 @@ async function updateOneSong(req, res) {
   };
   try {
     const { pageNumber: _pageNumber, ...updates } = req.body;
+    const songName = trimSongName(updates.songName);
+    const duplicateSong = await findDuplicateSong(songName, req.params.id);
+
+    if (duplicateSong) {
+      return sendDuplicateSongError(res);
+    }
+
+    updates.songName = songName;
     const updatedSong = await Song.findByIdAndUpdate(
       req.params.id,
       updates,
@@ -149,4 +220,5 @@ export {
   updateOneSong,
   deleteOneSong,
   searchSong,
+  checkSongNameAvailability,
 };
