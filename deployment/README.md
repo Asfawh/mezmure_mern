@@ -62,8 +62,8 @@ The deployed low-cost configuration consists of:
   `Mezmure Production Email Alerts` routes policy issues to the production
   email destination.
 - Private dashboard `Mezmure Production Observability`, covering health-check
-  success, Lambda invocations/errors, API Gateway requests/5xx responses, and
-  API response time.
+  success, Lambda invocations/errors, API Gateway requests, and API response
+  time. API Gateway 5xx responses remain covered by the alert condition.
 
 The browser key present in the compiled client configuration is New Relic's
 public browser ingest identifier, not the Lambda license key or a New Relic
