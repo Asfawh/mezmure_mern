@@ -7,7 +7,9 @@ Lambda for the Express API. MongoDB remains in Atlas. The AWS provider uses the
 
 Secrets are deliberately not represented as Terraform variables because values
 passed through Terraform would be retained in state. Configure `MONGODB_URI` and
-`JWT_SECRET` directly on the Lambda after the first apply.
+`JWT_SECRET` directly on the Lambda after the first apply. The production
+Turnstile secret follows the same rule and is stored as `TURNSTILE_SECRET_KEY`
+in the Lambda environment, never in Terraform or Git.
 
 The `.com` redirect should be added only after `mezmure.com` is registered and
 delegated. As of 2026-07-21 the registry reports that the domain is not registered.
@@ -24,6 +26,38 @@ The workflow uses GitHub OIDC to assume the
 `Asfawh/mezmure_mern` on `refs/heads/main`, and its deployment policy is limited
 to the production site bucket, Lambda function, and CloudFront distribution.
 No AWS access keys or application secrets are stored in GitHub.
+
+## Low-cost abuse protection
+
+The AWS configuration limits the HTTP API to a target of 10 requests per
+second with a burst of 20. The AWS account currently has an account-wide Lambda
+concurrency quota of 10, which is already the lowest usable cap: AWS requires
+all 10 executions to remain unreserved, so a lower function-level reservation
+cannot be configured unless the account quota is first increased. CloudFront
+applies HSTS, Content Security Policy, clickjacking, content-type, referrer,
+and browser-permission headers to both the site and API. These controls have no
+separate fixed monthly charge.
+
+`client/public/robots.txt` keeps normal search-engine discovery enabled while
+asking crawlers not to visit API and authenticated paths and opting out of
+several common AI-training crawlers. It is crawler guidance, not an access
+control.
+
+Cloudflare Turnstile is integrated into registration and login. Local
+development automatically uses Cloudflare's published always-pass test keys.
+To activate real production verification:
+
+1. Create a free Turnstile widget allowing `mezmure.org` and
+   `www.mezmure.org`.
+2. Add its public site key as the GitHub Actions repository variable
+   `VITE_TURNSTILE_SITE_KEY`.
+3. Add its secret key to the existing Lambda environment as
+   `TURNSTILE_SECRET_KEY`, preserving every existing environment variable.
+
+The server intentionally enables production verification only when the secret
+is configured, so a frontend deployment cannot lock out users while the widget
+is being provisioned. The former public `GET /api/users` route was removed
+because it was unused and exposed account records to unauthenticated clients.
 
 ## Observability cost controls
 

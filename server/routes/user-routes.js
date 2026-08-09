@@ -2,14 +2,12 @@ import { Router } from "express";
 import {
   loginUser,
   registerUser,
-  getAllUsers,
 } from "../controllers/user-controller.js";
+import requireTurnstile from '../middleware/turnstile.middleware.js';
 
 const router = Router();
 
-router.post("/register", registerUser);
-router.post("/login", loginUser);
-
-router.get("/", getAllUsers);
+router.post("/register", requireTurnstile, registerUser);
+router.post("/login", requireTurnstile, loginUser);
 
 export default router;

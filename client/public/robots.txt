@@ -1,0 +1,21 @@
+# Public Mezmure pages remain discoverable by normal search engines. Private,
+# authenticated, and API paths should not be crawled.
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /favorites
+Disallow: /songs/new
+
+# Opt out of common AI-training crawlers without hiding the public library from
+# Google Search or Bing.
+User-agent: GPTBot
+Disallow: /
+
+User-agent: ClaudeBot
+Disallow: /
+
+User-agent: CCBot
+Disallow: /
+
+User-agent: Google-Extended
+Disallow: /

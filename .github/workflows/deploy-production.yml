@@ -50,6 +50,7 @@ jobs:
       - name: Validate and build
         env:
           VITE_DONATION_URL: ${{ vars.VITE_DONATION_URL }}
+          VITE_TURNSTILE_SITE_KEY: ${{ vars.VITE_TURNSTILE_SITE_KEY }}
         run: |
           npm run build
           node --check server/server.js
