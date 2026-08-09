@@ -69,4 +69,6 @@ The browser key present in the compiled client configuration is New Relic's
 public browser ingest identifier, not the Lambda license key or a New Relic
 management API key. Never substitute the SSM license key or a user API key into
 client code. New Relic management keys are needed only while changing the
-account configuration and must not be committed.
+account configuration and must not be committed. The dedicated management key
+is retained in the standard-tier SecureString parameter
+`/mezmure/newrelic/user-api-key`; the Lambda role has no permission to read it.
