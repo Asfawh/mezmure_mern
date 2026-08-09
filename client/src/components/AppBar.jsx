@@ -37,6 +37,12 @@ function AppBar() {
             <LinkContainer to="/songs">
               <Nav.Link>Mezmure Library</Nav.Link>
             </LinkContainer>
+            <LinkContainer to="/support">
+              <Nav.Link className="support-nav-link">
+                <span aria-hidden="true">♥</span>
+                Donate
+              </Nav.Link>
+            </LinkContainer>
             {state.user && (
               <>
                 <LinkContainer to="/favorites">
