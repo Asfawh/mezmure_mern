@@ -18,8 +18,11 @@ provider "aws" {
 }
 
 locals {
-  domain_name = "mezmure.org"
-  origin_id   = "mezmure-static-origin"
+  domain_name               = "mezmure.org"
+  origin_id                 = "mezmure-static-origin"
+  new_relic_account_id      = "8377147"
+  new_relic_license_key_ssm = "/mezmure/newrelic/license-key"
+  new_relic_layer_arn       = "arn:aws:lambda:us-west-2:451483290750:layer:NewRelicNodeJS22XARM64-slim:62"
 }
 
 data "aws_route53_zone" "primary" {
@@ -140,22 +143,67 @@ resource "aws_iam_role_policy_attachment" "lambda_logs" {
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
 }
 
+data "aws_iam_policy_document" "lambda_new_relic" {
+  statement {
+    sid       = "ReadNewRelicLicenseKey"
+    actions   = ["ssm:GetParameter"]
+    resources = ["arn:aws:ssm:us-west-2:${data.aws_caller_identity.current.account_id}:parameter${local.new_relic_license_key_ssm}"]
+  }
+}
+
+resource "aws_iam_role_policy" "lambda_new_relic" {
+  name   = "mezmure-newrelic-license-key"
+  role   = aws_iam_role.lambda.id
+  policy = data.aws_iam_policy_document.lambda_new_relic.json
+}
+
+resource "aws_cloudwatch_log_group" "api" {
+  name              = "/aws/lambda/mezmure-api"
+  retention_in_days = 14
+}
+
 resource "aws_lambda_function" "api" {
   function_name    = "mezmure-api"
   role             = aws_iam_role.lambda.arn
   runtime          = "nodejs22.x"
   architectures    = ["arm64"]
-  handler          = "server.handler"
+  handler          = "/opt/nodejs/node_modules/newrelic-esm-lambda-wrapper/index.handler"
   filename         = data.archive_file.api.output_path
   source_code_hash = data.archive_file.api.output_base64sha256
   memory_size      = 512
   timeout          = 20
+  layers           = [local.new_relic_layer_arn]
+
+  depends_on = [
+    aws_cloudwatch_log_group.api,
+    aws_iam_role_policy.lambda_new_relic,
+  ]
 
   environment {
     variables = {
       MONGODB_URI = "configured-after-terraform-apply"
       JWT_SECRET  = "configured-after-terraform-apply"
+
+      NEW_RELIC_ACCOUNT_ID                     = local.new_relic_account_id
+      NEW_RELIC_APM_LAMBDA_MODE                = "true"
+      NEW_RELIC_APP_NAME                       = "Mezmure API Production"
+      NEW_RELIC_CLOUD_AWS_ACCOUNT_ID           = data.aws_caller_identity.current.account_id
+      NEW_RELIC_EXTENSION_LOGS_ENABLED         = "false"
+      NEW_RELIC_EXTENSION_SEND_EXTENSION_LOGS  = "false"
+      NEW_RELIC_EXTENSION_SEND_FUNCTION_LOGS   = "false"
+      NEW_RELIC_EXTENSION_SEND_PLATFORM_LOGS   = "false"
+      NEW_RELIC_LAMBDA_EXTENSION_ENABLED       = "true"
+      NEW_RELIC_LAMBDA_HANDLER                 = "server.handler"
+      NEW_RELIC_LICENSE_KEY_SSM_PARAMETER_NAME = local.new_relic_license_key_ssm
+      NEW_RELIC_TRUSTED_ACCOUNT_KEY            = local.new_relic_account_id
+      NODE_OPTIONS                             = "--experimental-loader newrelic/esm-loader.mjs"
     }
+  }
+
+  tags = {
+    "NR.Apm.Lambda.Mode" = "true"
+    application          = "mezmure"
+    environment          = "production"
   }
 
   lifecycle {
