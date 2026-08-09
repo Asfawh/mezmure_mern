@@ -52,7 +52,11 @@ function Details() {
         <div className="lyrics-meta">
           <span>{song.artistName || 'Traditional'}</span>
           {song.genre && <span>{song.genre}</span>}
-          {song.pageNumber && <span>Mezmure No. {song.pageNumber}</span>}
+          {song.pageNumber && (
+            <span aria-label={`Mezmure number ${song.pageNumber}`}>
+              M#{song.pageNumber}
+            </span>
+          )}
           {displayedSource && <span>Source: {displayedSource}</span>}
         </div>
       </header>

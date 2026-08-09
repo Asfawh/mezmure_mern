@@ -30,7 +30,12 @@ function EachSong({
         <div className="song-card-topline">
           <span className="genre-pill">{song.genre || 'Mezmure'}</span>
           {song.pageNumber && (
-            <span className="mezmure-number">Mezmure No. {song.pageNumber}</span>
+            <span
+              className="mezmure-number"
+              aria-label={`Mezmure number ${song.pageNumber}`}
+            >
+              M#{song.pageNumber}
+            </span>
           )}
         </div>
         <Card.Title>{song.songName}</Card.Title>
