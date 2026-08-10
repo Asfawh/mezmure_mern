@@ -8,6 +8,11 @@ import Modal from 'react-bootstrap/Modal';
 
 /* local */
 import useLoginReg from './hooks/useLoginReg';
+import Turnstile from '../components/Turnstile';
+import {
+  turnstileEnabled,
+  turnstileSiteKey,
+} from '../config/turnstile';
 
 /* variables */
 const initialFormState = {
@@ -18,6 +23,7 @@ const initialFormState = {
 function LoginModal({ showLogin, handleClose }) {
   const [formState, setFormState] = useState(initialFormState);
   const [validated, setValidated] = useState(false);
+  const [turnstileToken, setTurnstileToken] = useState('');
   const { loginReg, errors, generalError, isLoading } = useLoginReg();
 
   const handleChange = (e) => {
@@ -28,6 +34,7 @@ function LoginModal({ showLogin, handleClose }) {
   const handleCancel = () => {
     setFormState(initialFormState);
     setValidated(false);
+    setTurnstileToken('');
     handleClose('login');
   };
 
@@ -42,9 +49,10 @@ function LoginModal({ showLogin, handleClose }) {
 
     setValidated(true);
     try {
-      await loginReg('login', formState);
+      await loginReg('login', { ...formState, turnstileToken });
       setFormState(initialFormState);
       setValidated(false);
+      setTurnstileToken('');
       handleClose('login');
     } catch (err) {
       console.log(err);
@@ -92,12 +100,25 @@ function LoginModal({ showLogin, handleClose }) {
               {generalError}
             </div>
           )}
+          {showLogin && turnstileEnabled && (
+            <Turnstile
+              action="login"
+              onTokenChange={setTurnstileToken}
+              siteKey={turnstileSiteKey}
+            />
+          )}
         </Modal.Body>
         <Modal.Footer>
           <Button variant="outline-primary" size="sm" onClick={handleCancel}>
             Cancel
           </Button>
-          <Button type="submit" size="sm" disabled={isLoading}>
+          <Button
+            type="submit"
+            size="sm"
+            disabled={
+              isLoading || (turnstileEnabled && !turnstileToken)
+            }
+          >
             {isLoading ? 'Logging in…' : 'Login'}
           </Button>
         </Modal.Footer>

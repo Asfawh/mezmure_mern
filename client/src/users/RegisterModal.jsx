@@ -8,6 +8,11 @@ import Modal from 'react-bootstrap/Modal';
 
 /* local */
 import useLoginReg from './hooks/useLoginReg';
+import Turnstile from '../components/Turnstile';
+import {
+  turnstileEnabled,
+  turnstileSiteKey,
+} from '../config/turnstile';
 
 /* variables */
 const initialFormState = {
@@ -19,6 +24,7 @@ const initialFormState = {
 function RegisterModal({ showRegister, handleClose }) {
   const [formState, setFormState] = useState(initialFormState);
   const [validated, setValidated] = useState(false);
+  const [turnstileToken, setTurnstileToken] = useState('');
   const { loginReg, errors, generalError, isLoading } = useLoginReg();
 
   const handleChange = (e) => {
@@ -29,6 +35,7 @@ function RegisterModal({ showRegister, handleClose }) {
   const handleCancel = () => {
     setFormState(initialFormState);
     setValidated(false);
+    setTurnstileToken('');
     handleClose('register');
   };
 
@@ -43,9 +50,10 @@ function RegisterModal({ showRegister, handleClose }) {
 
     setValidated(true);
     try {
-      await loginReg('register', formState);
+      await loginReg('register', { ...formState, turnstileToken });
       setFormState(initialFormState);
       setValidated(false);
+      setTurnstileToken('');
       handleClose('register');
     } catch (err) {
       console.log(err);
@@ -118,12 +126,25 @@ function RegisterModal({ showRegister, handleClose }) {
               {generalError}
             </div>
           )}
+          {showRegister && turnstileEnabled && (
+            <Turnstile
+              action="register"
+              onTokenChange={setTurnstileToken}
+              siteKey={turnstileSiteKey}
+            />
+          )}
         </Modal.Body>
         <Modal.Footer>
           <Button variant="outline-primary" size="sm" onClick={handleCancel}>
             Cancel
           </Button>
-          <Button type="submit" size="sm" disabled={isLoading}>
+          <Button
+            type="submit"
+            size="sm"
+            disabled={
+              isLoading || (turnstileEnabled && !turnstileToken)
+            }
+          >
             {isLoading ? 'Registering…' : 'Register'}
           </Button>
         </Modal.Footer>
