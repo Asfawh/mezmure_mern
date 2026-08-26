@@ -49,6 +49,10 @@ function AppBar() {
             )}
           </Nav>
           <div className="nav-utility">
+            <Nav.Link className="companion-nav-link" href="https://zemaverse.com/">
+              <span aria-hidden="true">↔</span>
+              Visit ZemaVerse
+            </Nav.Link>
             <LinkContainer to="/support">
               <Nav.Link className="support-nav-link">
                 <span aria-hidden="true">♥</span>
