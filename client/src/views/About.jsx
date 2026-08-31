@@ -24,8 +24,8 @@ function About() {
           <h2 id="our-story-title">A respectful home for mezmur knowledge</h2>
         </div>
         <div>
-          <p>Mezmur carries prayer, teaching, history, language, and shared memory. Yet lyrics and reliable context are often scattered across recordings, books, handwritten collections, congregations, and family knowledge.</p>
-          <p>This library brings those paths together in a searchable, multilingual space. It is intended to support worshippers, youth, families, choir members, researchers, and diaspora communities while respecting the Church tradition and the people who create and preserve its music.</p>
+          <p>EOTC Mezmur is the hymn and spiritual-song tradition of the Ethiopian Orthodox Tewahedo Church. Its lyrics express prayer, praise, repentance, thanksgiving, and Christian teaching, drawing from Holy Scripture, the lives of saints, the feasts of the Church, fasting seasons, and the worship life of the faithful.</p>
+          <p>This library brings Ethiopian Orthodox hymn lyrics together in a searchable, multilingual collection. It helps worshippers, youth, families, Sunday-school students, choir members, researchers, and diaspora communities read, learn, and preserve Mezmur while honoring the faith, liturgical tradition, Zemari, and communities that pass these spiritual songs from generation to generation.</p>
         </div>
       </section>
 
