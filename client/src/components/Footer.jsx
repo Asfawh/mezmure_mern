@@ -7,7 +7,7 @@ function Footer() {
       <Container className="footer-grid">
         <div>
           <span className="footer-brand">EOTC Mezmure</span>
-          <p>Preserving sacred Mezmure, verses, and shared tradition.</p>
+          <p>Preserving Ethiopian Orthodox hymn lyrics, verses, and spiritual-song tradition.</p>
         </div>
         <nav aria-label="Footer navigation">
           <Link to="/songs">Mezmure Library</Link>
