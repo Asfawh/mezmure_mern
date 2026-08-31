@@ -11,8 +11,11 @@ function Footer() {
         </div>
         <nav aria-label="Footer navigation">
           <Link to="/songs">Mezmure Library</Link>
+          <Link to="/about">About Us</Link>
+          <Link to="/contact">Contact Us</Link>
           <Link to="/support">Support Mezmure</Link>
-          <a href="mailto:contact@mezmure.org">Contact</a>
+          <Link to="/privacy">Privacy</Link>
+          <Link to="/terms">Terms</Link>
         </nav>
         <small>© {new Date().getFullYear()} Mezmure.org</small>
       </Container>
