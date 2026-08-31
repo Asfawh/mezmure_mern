@@ -12,7 +12,7 @@ function About() {
 
   return (
     <div className="trust-page">
-      <header className="trust-hero">
+      <header className="trust-hero trust-hero-image">
         <span className="eyebrow">About EOTC Mezmure</span>
         <h1>Preserving sacred words across generations.</h1>
         <p>EOTC Mezmure is an independent community library created to make Ethiopian Orthodox Tewahedo mezmur lyrics, verses, Zemari profiles, languages, and traditions easier to discover and preserve.</p>
