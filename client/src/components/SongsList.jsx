@@ -11,20 +11,35 @@ function SongsList({ songs, setIsLoaded }) {
         </div>
       </div>
       <div className="manager-table-wrap">
-        <table className="table manager-table">
+        <table className="table manager-table" aria-label="All Mezmure">
+          <colgroup>
+            <col className="manager-col-title" />
+            <col className="manager-col-zemari" />
+            <col className="manager-col-genre" />
+            <col className="manager-col-source" />
+            <col className="manager-col-actions" />
+          </colgroup>
           <thead>
             <tr>
-              <th>Mezmure</th>
-              <th>Zemari</th>
-              <th>Genre</th>
-              <th>Source</th>
-              <th>Actions</th>
+              <th scope="col">Mezmure</th>
+              <th scope="col">Zemari</th>
+              <th scope="col">Genre</th>
+              <th scope="col">Source</th>
+              <th scope="col" className="manager-actions-heading">Actions</th>
             </tr>
           </thead>
           <tbody>
-            {songs.map((song) => (
-              <SongRow key={song._id} song={song} setIsLoaded={setIsLoaded} />
-            ))}
+            {songs.length > 0 ? (
+              songs.map((song) => (
+                <SongRow key={song._id} song={song} setIsLoaded={setIsLoaded} />
+              ))
+            ) : (
+              <tr>
+                <td colSpan="5" className="manager-table-empty">
+                  No Mezmure have been added yet.
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
       </div>
