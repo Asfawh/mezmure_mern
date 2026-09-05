@@ -72,3 +72,25 @@ client code. New Relic management keys are needed only while changing the
 account configuration and must not be committed. The dedicated management key
 is retained in the standard-tier SecureString parameter
 `/mezmure/newrelic/user-api-key`; the Lambda role has no permission to read it.
+
+## CloudFront Free plan
+
+The production distribution uses AWS managed cache and origin-request policies
+and `PriceClass_All` so it is compatible with the CloudFront flat-rate Free
+plan. A dedicated CloudFront Function preserves the site's CSP, HSTS,
+Turnstile, New Relic, and
+PayPal response-header allowances without relying on a custom response-header
+policy. The dedicated CloudFront-scope WAF applies a Free-plan-compatible
+global per-IP limit of 1,000 requests per five minutes. API Gateway separately
+limits the API to 10 requests per second with a burst of 20.
+
+The pricing-plan subscription itself is managed through AWS
+PricingPlanManager, which is not represented by the pinned Terraform AWS
+provider. The subscription must contain exactly this distribution and its
+dedicated WAF web ACL. Do not share the function or WAF ACL with another
+distribution because flat-rate plan resources must be exclusive to one plan.
+The active Free subscription also contains the `mezmure.org` Route 53 hosted
+zone so its standard hosted-zone, record, and DNS-query charges are covered by
+the plan. Terraform manages the compatible distribution, function, WAF, and
+throttling configuration; do not cancel or detach the PricingPlanManager
+subscription when applying future infrastructure changes.
