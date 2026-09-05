@@ -1,4 +1,5 @@
 /* react */
+/* eslint-disable react/prop-types */
 import { useState } from 'react';
 
 /* react bootstrap */
@@ -10,6 +11,7 @@ import Modal from 'react-bootstrap/Modal';
 import useLoginReg from './hooks/useLoginReg';
 import Turnstile from '../components/Turnstile';
 import {
+  turnstileConfigurationError,
   turnstileEnabled,
   turnstileSiteKey,
 } from '../config/turnstile';
@@ -24,6 +26,7 @@ function LoginModal({ showLogin, handleClose }) {
   const [formState, setFormState] = useState(initialFormState);
   const [validated, setValidated] = useState(false);
   const [turnstileToken, setTurnstileToken] = useState('');
+  const [turnstileResetSignal, setTurnstileResetSignal] = useState(0);
   const { loginReg, errors, generalError, isLoading } = useLoginReg();
 
   const handleChange = (e) => {
@@ -56,11 +59,13 @@ function LoginModal({ showLogin, handleClose }) {
       handleClose('login');
     } catch (err) {
       console.log(err);
+      setTurnstileToken('');
+      setTurnstileResetSignal((value) => value + 1);
     }
   };
 
   return (
-    <Modal show={showLogin} onHide={() => handleClose('login')}>
+    <Modal show={showLogin} onHide={handleCancel}>
       <Form noValidate validated={validated} onSubmit={handleSubmit}>
         <Modal.Header closeButton>
           <Modal.Title>Login</Modal.Title>
@@ -100,10 +105,16 @@ function LoginModal({ showLogin, handleClose }) {
               {generalError}
             </div>
           )}
+          {turnstileConfigurationError && (
+            <div className="alert alert-danger py-2" role="alert">
+              {turnstileConfigurationError}
+            </div>
+          )}
           {showLogin && turnstileEnabled && (
             <Turnstile
               action="login"
               onTokenChange={setTurnstileToken}
+              resetSignal={turnstileResetSignal}
               siteKey={turnstileSiteKey}
             />
           )}
@@ -116,7 +127,9 @@ function LoginModal({ showLogin, handleClose }) {
             type="submit"
             size="sm"
             disabled={
-              isLoading || (turnstileEnabled && !turnstileToken)
+              isLoading ||
+              Boolean(turnstileConfigurationError) ||
+              (turnstileEnabled && !turnstileToken)
             }
           >
             {isLoading ? 'Logging in…' : 'Login'}

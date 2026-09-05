@@ -80,7 +80,7 @@ function Support() {
               <span>
                 Contact us for the available ways to support Mezmure.
               </span>
-              <a href="mailto:contact@mezmure.org?subject=Supporting%20the%20Mezmure%20initiative">
+              <a href="mailto:chosky05@gmail.com?subject=Supporting%20the%20Mezmure%20initiative">
                 Contact us to support
               </a>
             </div>

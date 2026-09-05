@@ -1,4 +1,5 @@
 /* react */
+/* eslint-disable react/prop-types */
 import { useState } from 'react';
 
 /* react bootstrap */
@@ -10,6 +11,7 @@ import Modal from 'react-bootstrap/Modal';
 import useLoginReg from './hooks/useLoginReg';
 import Turnstile from '../components/Turnstile';
 import {
+  turnstileConfigurationError,
   turnstileEnabled,
   turnstileSiteKey,
 } from '../config/turnstile';
@@ -25,6 +27,7 @@ function RegisterModal({ showRegister, handleClose }) {
   const [formState, setFormState] = useState(initialFormState);
   const [validated, setValidated] = useState(false);
   const [turnstileToken, setTurnstileToken] = useState('');
+  const [turnstileResetSignal, setTurnstileResetSignal] = useState(0);
   const { loginReg, errors, generalError, isLoading } = useLoginReg();
 
   const handleChange = (e) => {
@@ -57,11 +60,13 @@ function RegisterModal({ showRegister, handleClose }) {
       handleClose('register');
     } catch (err) {
       console.log(err);
+      setTurnstileToken('');
+      setTurnstileResetSignal((value) => value + 1);
     }
   };
 
   return (
-    <Modal show={showRegister} onHide={() => handleClose('register')}>
+    <Modal show={showRegister} onHide={handleCancel}>
       <Form noValidate validated={validated} onSubmit={handleSubmit}>
         <Modal.Header closeButton>
           <Modal.Title>Register</Modal.Title>
@@ -126,10 +131,16 @@ function RegisterModal({ showRegister, handleClose }) {
               {generalError}
             </div>
           )}
+          {turnstileConfigurationError && (
+            <div className="alert alert-danger py-2" role="alert">
+              {turnstileConfigurationError}
+            </div>
+          )}
           {showRegister && turnstileEnabled && (
             <Turnstile
               action="register"
               onTokenChange={setTurnstileToken}
+              resetSignal={turnstileResetSignal}
               siteKey={turnstileSiteKey}
             />
           )}
@@ -142,7 +153,9 @@ function RegisterModal({ showRegister, handleClose }) {
             type="submit"
             size="sm"
             disabled={
-              isLoading || (turnstileEnabled && !turnstileToken)
+              isLoading ||
+              Boolean(turnstileConfigurationError) ||
+              (turnstileEnabled && !turnstileToken)
             }
           >
             {isLoading ? 'Registering…' : 'Register'}

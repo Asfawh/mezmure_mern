@@ -37,6 +37,12 @@ function AppBar() {
             <LinkContainer to="/songs">
               <Nav.Link>Mezmure Library</Nav.Link>
             </LinkContainer>
+            <LinkContainer to="/about">
+              <Nav.Link>About</Nav.Link>
+            </LinkContainer>
+            <LinkContainer to="/contact">
+              <Nav.Link>Contact</Nav.Link>
+            </LinkContainer>
             {state.user && (
               <>
                 <LinkContainer to="/favorites">
@@ -49,6 +55,10 @@ function AppBar() {
             )}
           </Nav>
           <div className="nav-utility">
+            <Nav.Link className="companion-nav-link" href="https://zemaverse.com/">
+              <span aria-hidden="true">↔</span>
+              Visit ZemaVerse
+            </Nav.Link>
             <LinkContainer to="/support">
               <Nav.Link className="support-nav-link">
                 <span aria-hidden="true">♥</span>

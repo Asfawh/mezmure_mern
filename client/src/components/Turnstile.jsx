@@ -1,18 +1,33 @@
 import { useEffect, useRef, useState } from 'react';
 
+/* eslint-disable react/prop-types */
+
 const SCRIPT_ID = 'cloudflare-turnstile-script';
 const SCRIPT_URL =
   'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';
+let turnstilePromise;
 
 function loadTurnstile() {
   if (window.turnstile) return Promise.resolve(window.turnstile);
+  if (turnstilePromise) return turnstilePromise;
 
-  return new Promise((resolve, reject) => {
+  turnstilePromise = new Promise((resolve, reject) => {
     const existingScript = document.getElementById(SCRIPT_ID);
     const script = existingScript || document.createElement('script');
 
-    const handleLoad = () => resolve(window.turnstile);
-    const handleError = () => reject(new Error('Security check could not load.'));
+    const handleLoad = () => {
+      if (window.turnstile) {
+        resolve(window.turnstile);
+        return;
+      }
+
+      turnstilePromise = undefined;
+      reject(new Error('Security check loaded without its browser API.'));
+    };
+    const handleError = () => {
+      turnstilePromise = undefined;
+      reject(new Error('Security check could not load.'));
+    };
 
     script.addEventListener('load', handleLoad, { once: true });
     script.addEventListener('error', handleError, { once: true });
@@ -25,9 +40,11 @@ function loadTurnstile() {
       document.head.appendChild(script);
     }
   });
+
+  return turnstilePromise;
 }
 
-function Turnstile({ action, onTokenChange, siteKey }) {
+function Turnstile({ action, onTokenChange, resetSignal, siteKey }) {
   const containerRef = useRef(null);
   const [loadError, setLoadError] = useState('');
 
@@ -67,7 +84,7 @@ function Turnstile({ action, onTokenChange, siteKey }) {
         window.turnstile.remove(widgetId);
       }
     };
-  }, [action, onTokenChange, siteKey]);
+  }, [action, onTokenChange, resetSignal, siteKey]);
 
   return (
     <div className="mb-3">

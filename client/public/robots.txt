@@ -6,6 +6,8 @@ Disallow: /api/
 Disallow: /favorites
 Disallow: /songs/new
 
+Sitemap: https://mezmure.org/sitemap.xml
+
 # Opt out of common AI-training crawlers without hiding the public library from
 # Google Search or Bing.
 User-agent: GPTBot
