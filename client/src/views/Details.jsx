@@ -129,7 +129,12 @@ function Details() {
           )}
         </div>
 
-        <div className="lyrics-slide" aria-live="polite" key={activeSlide}>
+        <div
+          className="lyrics-slide"
+          aria-live="polite"
+          key={activeSlide}
+          onCopy={(event) => event.preventDefault()}
+        >
           <span className="lyrics-slide-ornament" aria-hidden="true">✥</span>
           {currentLyrics.length > 0 ? (
             <div className="lyrics-slide-lines">
