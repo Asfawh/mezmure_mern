@@ -1,0 +1,272 @@
+[
+  {
+    "id": 1,
+    "am": "አባ አረጋዊ",
+    "en": "Abba Aregawi",
+    "src": "/assets/sacred-art/1.webp"
+  },
+  {
+    "id": 2,
+    "am": "ነቢዩ ሐጌ",
+    "en": "Prophet Haggai",
+    "src": "/assets/sacred-art/2.webp"
+  },
+  {
+    "id": 3,
+    "am": "ነቢዩ ኤርምያስ",
+    "en": "Prophet Jeremiah",
+    "src": "/assets/sacred-art/3.webp"
+  },
+  {
+    "id": 4,
+    "am": "ነቢዩ ዕዝራ",
+    "en": "Prophet Ezra",
+    "src": "/assets/sacred-art/4.webp"
+  },
+  {
+    "id": 5,
+    "am": "ቅዱስ ያዕቆብ የእልፍዮስ ልጅ",
+    "en": "St. James, son of Alphaeus",
+    "src": "/assets/sacred-art/5.webp"
+  },
+  {
+    "id": 6,
+    "am": "ቅዱስ ያዕቆብ የዘብዴዎስ ልጅ",
+    "en": "St. James, son of Zebedee",
+    "src": "/assets/sacred-art/6.webp"
+  },
+  {
+    "id": 7,
+    "am": "ቅዱስ እንድርያስ",
+    "en": "St. Andrew",
+    "src": "/assets/sacred-art/7.webp"
+  },
+  {
+    "id": 8,
+    "am": "ቅዱስ በርተሎሜዎስ",
+    "en": "St. Bartholomew",
+    "src": "/assets/sacred-art/8.webp"
+  },
+  {
+    "id": 9,
+    "am": "ቅዱስ ማትያስ",
+    "en": "St. Matthias",
+    "src": "/assets/sacred-art/9.webp"
+  },
+  {
+    "id": 10,
+    "am": "ቅዱስ ስምዖን",
+    "en": "St. Simon",
+    "src": "/assets/sacred-art/10.webp"
+  },
+  {
+    "id": 11,
+    "am": "ቅዱስ ፊልጶስ",
+    "en": "St. Philip",
+    "src": "/assets/sacred-art/11.webp"
+  },
+  {
+    "id": 12,
+    "am": "ቅዱስ ሉቃስ",
+    "en": "St. Luke",
+    "src": "/assets/sacred-art/12.webp"
+  },
+  {
+    "id": 13,
+    "am": "ቅዱስ ማቴዎስ",
+    "en": "St. Matthew",
+    "src": "/assets/sacred-art/13.webp"
+  },
+  {
+    "id": 14,
+    "am": "ቅዱስ ዮሐንስ",
+    "en": "St. John",
+    "src": "/assets/sacred-art/14.webp"
+  },
+  {
+    "id": 15,
+    "am": "ቅዱስ ማርቆስ",
+    "en": "St. Mark",
+    "src": "/assets/sacred-art/15.webp"
+  },
+  {
+    "id": 16,
+    "am": "አቡነ ገብረ መንፈስ ቅዱስ",
+    "en": "Abune Gebre Menfes Kidus",
+    "src": "/assets/sacred-art/16.webp"
+  },
+  {
+    "id": 17,
+    "am": "ቅድስት ሥላሴ",
+    "en": "Holy Trinity",
+    "src": "/assets/sacred-art/17.webp"
+  },
+  {
+    "id": 18,
+    "am": "ነቢዩ አብድዩ",
+    "en": "Prophet Obadiah",
+    "src": "/assets/sacred-art/18.webp"
+  },
+  {
+    "id": 19,
+    "am": "መልከ ጼዴቅ",
+    "en": "Melchizedek",
+    "src": "/assets/sacred-art/19.webp"
+  },
+  {
+    "id": 20,
+    "am": "ቅድስት ሐና",
+    "en": "St. Hannah",
+    "src": "/assets/sacred-art/20.webp"
+  },
+  {
+    "id": 21,
+    "am": "ቅድስት ክርስቶስ ሠምራ",
+    "en": "St. Kristos Samra",
+    "src": "/assets/sacred-art/21.webp"
+  },
+  {
+    "id": 22,
+    "am": "አባ አሌፍ",
+    "en": "Abba Alef",
+    "src": "/assets/sacred-art/22.webp"
+  },
+  {
+    "id": 23,
+    "am": "አባ ሊቃኖስ",
+    "en": "Abba Liqanos",
+    "src": "/assets/sacred-art/23.webp"
+  },
+  {
+    "id": 24,
+    "am": "አባ ጰንጠሌዎን",
+    "en": "Abba Pantelewon",
+    "src": "/assets/sacred-art/24.webp"
+  },
+  {
+    "id": 25,
+    "am": "አባ ጽሕማ",
+    "en": "Abba Tsihma",
+    "src": "/assets/sacred-art/25.webp"
+  },
+  {
+    "id": 26,
+    "am": "አባ ይምአታ",
+    "en": "Abba Yemata",
+    "src": "/assets/sacred-art/26.webp"
+  },
+  {
+    "id": 27,
+    "am": "ነቢዩ ሕዝቅኤል",
+    "en": "Prophet Ezekiel",
+    "src": "/assets/sacred-art/27.webp"
+  },
+  {
+    "id": 28,
+    "am": "ነቢዩ ሙሴ",
+    "en": "Prophet Moses",
+    "src": "/assets/sacred-art/28.webp"
+  },
+  {
+    "id": 29,
+    "am": "ነቢዩ ሶፎንያስ",
+    "en": "Prophet Zephaniah",
+    "src": "/assets/sacred-art/29.webp"
+  },
+  {
+    "id": 30,
+    "am": "ነቢዩ ሆሴዕ",
+    "en": "Prophet Hosea",
+    "src": "/assets/sacred-art/30.webp"
+  },
+  {
+    "id": 31,
+    "am": "ነቢዩ ዮናስ",
+    "en": "Prophet Jonah",
+    "src": "/assets/sacred-art/31.webp"
+  },
+  {
+    "id": 32,
+    "am": "ነቢዩ ኤልሳዕ",
+    "en": "Prophet Elisha",
+    "src": "/assets/sacred-art/32.webp"
+  },
+  {
+    "id": 33,
+    "am": "ነቢዩ ዳንኤል",
+    "en": "Prophet Daniel",
+    "src": "/assets/sacred-art/33.webp"
+  },
+  {
+    "id": 34,
+    "am": "ያዕቆብ",
+    "en": "Patriarch Jacob",
+    "src": "/assets/sacred-art/34.webp"
+  },
+  {
+    "id": 35,
+    "am": "አብርሃም",
+    "en": "Patriarch Abraham",
+    "src": "/assets/sacred-art/35.webp"
+  },
+  {
+    "id": 36,
+    "am": "ቅዱስ ጴጥሮስ",
+    "en": "St. Peter",
+    "src": "/assets/sacred-art/36.webp"
+  },
+  {
+    "id": 37,
+    "am": "ቅዱስ ታዴዎስ",
+    "en": "St. Thaddeus",
+    "src": "/assets/sacred-art/37.webp"
+  },
+  {
+    "id": 38,
+    "am": "ቅዱስ ቶማስ",
+    "en": "St. Thomas",
+    "src": "/assets/sacred-art/38.webp"
+  },
+  {
+    "id": 39,
+    "am": "አቡነ ተክለ ሃይማኖት",
+    "en": "Abune Tekle Haymanot",
+    "src": "/assets/sacred-art/39.webp"
+  },
+  {
+    "id": 40,
+    "am": "አቡነ አረጋዊ ዘደብረ ዳሞ",
+    "en": "Abune Aregawi of Debre Damo",
+    "src": "/assets/sacred-art/40.webp"
+  },
+  {
+    "id": 41,
+    "am": "አባ አፍጼ",
+    "en": "Abba Aftse",
+    "src": "/assets/sacred-art/41.webp"
+  },
+  {
+    "id": 42,
+    "am": "አባ ገሪማ",
+    "en": "Abba Garima",
+    "src": "/assets/sacred-art/42.webp"
+  },
+  {
+    "id": 43,
+    "am": "ነቢዩ ዳዊት",
+    "en": "Prophet David",
+    "src": "/assets/sacred-art/43.webp"
+  },
+  {
+    "id": 44,
+    "am": "ቅዱስ ዑራኤል",
+    "en": "Archangel Uriel",
+    "src": "/assets/sacred-art/44.webp"
+  },
+  {
+    "id": 45,
+    "am": "ቅድስት ማርያም ከልጇ ጋር",
+    "en": "St. Mary with the Child Jesus",
+    "src": "/assets/sacred-art/45.webp"
+  }
+]

@@ -40,6 +40,9 @@ function AppBar() {
             <LinkContainer to="/about">
               <Nav.Link>About</Nav.Link>
             </LinkContainer>
+            <LinkContainer to="/sacred-art">
+              <Nav.Link>Sacred Art</Nav.Link>
+            </LinkContainer>
             <LinkContainer to="/contact">
               <Nav.Link>Contact</Nav.Link>
             </LinkContainer>

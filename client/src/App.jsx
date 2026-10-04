@@ -15,6 +15,7 @@ import Contact from './views/Contact';
 import Privacy from './views/Privacy';
 import Terms from './views/Terms';
 import Footer from './components/Footer';
+import SacredArt from './views/SacredArt';
 
 function App() {
   return (
@@ -30,6 +31,7 @@ function App() {
               <Route path="/favorites" element={<Favorites />} />
               <Route path="/support" element={<Support />} />
               <Route path="/about" element={<About />} />
+              <Route path="/sacred-art" element={<SacredArt />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/privacy" element={<Privacy />} />
               <Route path="/terms" element={<Terms />} />

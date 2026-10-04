@@ -2,7 +2,7 @@
 import { useContext, useEffect, useMemo, useState } from 'react';
 
 /* react-router */
-import { useSearchParams } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 
 /* local */
 import { AuthContext } from '../context/AuthContext';
@@ -136,6 +136,15 @@ function MainList() {
           <span><strong>5</strong> traditional categories</span>
         </div>
       </section>
+
+      <aside className="sacred-art-invitation" aria-label="Explore sacred art">
+        <img src="/assets/sacred-art/17.webp" alt="" width="96" height="72" />
+        <div>
+          <span lang="am">የቤተ ክርስቲያን ሥዕሎች</span>
+          <p>Discover the sacred art of our tradition, with Amharic and English names.</p>
+        </div>
+        <Link to="/sacred-art">Explore the collection <span aria-hidden="true">→</span></Link>
+      </aside>
 
       <section className="library-section" aria-labelledby="library-heading">
         <div className="section-heading">

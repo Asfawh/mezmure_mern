@@ -1,0 +1,54 @@
+@font-face {
+  font-family: 'Mezmure Ethiopic';
+  src: url('/assets/sacred-art/NotoSerifEthiopic.ttf') format('truetype');
+  font-weight: 100 900;
+  font-display: swap;
+}
+.sacred-art-page { padding: 2.5rem 0 4rem; }
+.sacred-art-invitation { display: flex; align-items: center; gap: 1.15rem; padding: 1rem 1.4rem; margin: 1.5rem 0; background: #fff9ec; border: 1px solid #deca9e; border-left: 4px solid var(--gold); border-radius: 10px; }
+.sacred-art-invitation img { flex: none; object-fit: cover; border: 2px solid #bd9449; border-radius: 3px; }
+.sacred-art-invitation [lang='am'] { font-family: 'Mezmure Ethiopic', serif; color: var(--wine); font-size: 1.1rem; }
+.sacred-art-invitation p { margin: .3rem 0 0; font-size: .85rem; color: var(--muted); }
+.sacred-art-invitation a { margin-left: auto; flex-shrink: 0; color: var(--wine); font-weight: 650; font-size: .9rem; text-underline-offset: 4px; }
+@media (max-width: 767px) { .sacred-art-invitation { flex-wrap: wrap; padding: 1rem; } .sacred-art-invitation img { width: 64px; height: 56px; } .sacred-art-invitation div { flex: 1; } .sacred-art-invitation a { margin-left: 0; } }
+.sacred-art-heading { max-width: 760px; margin: 0 auto 2.5rem; text-align: center; }
+.sacred-art-heading h1 { display: grid; gap: .5rem; margin: 1rem 0; color: var(--wine); }
+.sacred-art-heading h1 > span:last-child { font: 2.7rem Georgia, serif; }
+.sacred-art-page [lang='am'], .sacred-art-modal [lang='am'] { font-family: 'Mezmure Ethiopic', serif; }
+.sacred-art-heading h1 [lang='am'] { font-size: clamp(1.7rem, 4vw, 2.6rem); }
+.sacred-art-heading p { color: var(--muted); line-height: 1.8; }
+.sacred-art-showcase { display: grid; grid-template-columns: minmax(0, 1.65fr) minmax(260px, 1fr); overflow: hidden; border: 1px solid var(--border); border-radius: 16px; background: var(--paper); box-shadow: 0 16px 40px #3b142410; }
+.sacred-art-collage { position: relative; isolation: isolate; display: flex; flex-direction: column; border: 0; padding: 0; background: #3c1020; color: #f8e6b5; cursor: zoom-in; overflow: hidden; box-shadow: inset 0 0 0 2px #f1c968, 0 0 22px #e4b84f88, 0 0 58px #7b203c66; }
+.sacred-art-collage::before { content: ''; position: absolute; inset: 0; z-index: 1; pointer-events: none; background: radial-gradient(circle at 50% 43%, #ffe9a52e 0, transparent 38%), linear-gradient(135deg, #ffd66c18, transparent 28%, transparent 72%, #8b264b24); mix-blend-mode: screen; }
+.sacred-art-collage img { position: relative; z-index: 0; display: block; width: 100%; height: auto; filter: saturate(1.12) contrast(1.04) brightness(1.05); }
+.sacred-art-collage > span { display: flex; justify-content: space-between; padding: .8rem 1.2rem; font-size: .85rem; }
+.sacred-art-print { align-self: center; padding: 2rem; }
+.sacred-art-print h2 { margin: .75rem 0 1rem; font: 2rem Georgia, serif; color: var(--wine); }
+.sacred-art-print p { line-height: 1.8; color: var(--muted); }
+.sacred-art-download { display: inline-flex; gap: 1.25rem; align-items: center; padding: .9rem 1.15rem; margin: .5rem 0 1rem; border-radius: 6px; background: var(--wine); color: #fff8e5; text-decoration: none; font-weight: 600; }
+.sacred-art-download:hover { background: var(--wine-dark); color: white; }
+.sacred-art-print small { display: block; color: var(--muted); line-height: 1.6; }
+.sacred-art-browse { margin-top: 3.5rem; }
+.sacred-art-toolbar { display: flex; align-items: end; justify-content: space-between; gap: 1.5rem; }
+.sacred-art-toolbar h2 { margin: .5rem 0 0; font: 2rem Georgia, serif; color: var(--wine); }
+.sacred-art-search { width: min(100%, 360px); }
+.sacred-art-search label { display: block; font-size: .8rem; margin-bottom: .4rem; color: var(--muted); }
+.sacred-art-search input { width: 100%; border: 1px solid #bbab94; border-radius: 7px; padding: .8rem 1rem; background: var(--paper); color: var(--ink); }
+.sacred-art-count { font-size: .8rem; color: var(--muted); margin: 1.2rem 0; }
+.sacred-art-grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 1.15rem; }
+.sacred-art-card { display: flex; flex-direction: column; padding: 5px; border: 3px ridge #d0aa5a; background: #491727; box-shadow: 0 4px 10px #2b0f2018; min-width: 0; cursor: zoom-in; transition: transform .15s ease; }
+.sacred-art-card:hover { transform: translateY(-3px); }
+.sacred-art-photo { display: block; aspect-ratio: 3 / 4; width: 100%; background: #25121b; }
+.sacred-art-photo img { width: 100%; height: 100%; object-fit: contain; }
+.sacred-art-label { display: flex; flex: 1; flex-direction: column; justify-content: center; gap: .35rem; padding: .65rem .25rem; min-height: 80px; background: linear-gradient(#f9ebc8, #e6c986); color: #421629; }
+.sacred-art-label [lang='am'] { font-size: .94rem; font-weight: 600; line-height: 1.5; }
+.sacred-art-label > span:last-child { font: .82rem/1.4 Georgia, serif; }
+.sacred-art-modal .modal-content { background: var(--paper); }
+.sacred-art-modal .modal-title { display: grid; gap: .25rem; color: var(--wine); font-size: 1.2rem; }
+.sacred-art-modal .modal-title > span:last-child { font-size: 1rem; }
+.sacred-art-modal .modal-body { text-align: center; background: #30101d; }
+.sacred-art-modal .modal-body img { max-width: 100%; max-height: 75vh; object-fit: contain; }
+.sacred-art-page button:focus-visible, .sacred-art-page a:focus-visible { outline: 3px solid #977221; outline-offset: 4px; }
+@media (max-width: 991px) { .sacred-art-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } .sacred-art-showcase { grid-template-columns: 1fr; } }
+@media (max-width: 575px) { .sacred-art-page { padding-top: 1.5rem; } .sacred-art-toolbar { align-items: stretch; flex-direction: column; } .sacred-art-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .7rem; } .sacred-art-print { padding: 1.5rem; } .sacred-art-label { min-height: 93px; } }
+@media (prefers-reduced-motion: reduce) { .sacred-art-card { transition: none; } }
