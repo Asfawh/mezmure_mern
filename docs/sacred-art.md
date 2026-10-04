@@ -27,4 +27,8 @@ Noto Serif Ethiopic is self-hosted under the SIL Open Font License; `OFL.txt` is
 - Website build and changed-file lint passed.
 - Browser checks: English search, Amharic search, empty-result recovery, enlarged painting modal, library link, and 390-pixel mobile width without horizontal overflow.
 
-Development only: no commit, push, or production deployment was performed.
+## Illustrated website edition
+
+The featured collection uses `glowing-collection.png`, an AI-redrawn illustration based on the photographic layout and the user's gold-and-burgundy reference. Its 45 added captions are HTML text sourced from the gallery data, with Amharic above English; generated lettering inside the illustration is not an authoritative transcription. Individual gallery panels remain original photographs.
+
+The download remains the original-photo print edition described above. The illustrated website edition is not a verified print master. Changes on main deploy through the production GitHub Actions workflow.

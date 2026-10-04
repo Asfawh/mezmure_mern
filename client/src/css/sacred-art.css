@@ -21,7 +21,7 @@
 .sacred-art-collage { position: relative; isolation: isolate; display: flex; flex-direction: column; border: 0; padding: 0; background: #3c1020; color: #f8e6b5; cursor: zoom-in; overflow: hidden; box-shadow: inset 0 0 0 2px #f1c968, 0 0 22px #e4b84f88, 0 0 58px #7b203c66; }
 .sacred-art-collage::before { content: ''; position: absolute; inset: 0; z-index: 1; pointer-events: none; background: radial-gradient(circle at 50% 43%, #ffe9a52e 0, transparent 38%), linear-gradient(135deg, #ffd66c18, transparent 28%, transparent 72%, #8b264b24); mix-blend-mode: screen; }
 .sacred-art-collage img { position: relative; z-index: 0; display: block; width: 100%; height: auto; filter: saturate(1.12) contrast(1.04) brightness(1.05); }
-.sacred-art-collage > span { display: flex; justify-content: space-between; padding: .8rem 1.2rem; font-size: .85rem; }
+.sacred-art-collage > span:not(.glowing-collection) { display: flex; justify-content: space-between; padding: .8rem 1.2rem; font-size: .85rem; }
 .sacred-art-print { align-self: center; padding: 2rem; }
 .sacred-art-print h2 { margin: .75rem 0 1rem; font: 2rem Georgia, serif; color: var(--wine); }
 .sacred-art-print p { line-height: 1.8; color: var(--muted); }
@@ -52,3 +52,12 @@
 @media (max-width: 991px) { .sacred-art-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } .sacred-art-showcase { grid-template-columns: 1fr; } }
 @media (max-width: 575px) { .sacred-art-page { padding-top: 1.5rem; } .sacred-art-toolbar { align-items: stretch; flex-direction: column; } .sacred-art-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .7rem; } .sacred-art-print { padding: 1.5rem; } .sacred-art-label { min-height: 93px; } }
 @media (prefers-reduced-motion: reduce) { .sacred-art-card { transition: none; } }
+
+.glowing-collection { position: relative; display: block; width: 100%; container-type: inline-size; }
+.glowing-collection > img { width: 100%; height: auto; max-height: none !important; filter: none; }
+.glowing-caption { position: absolute; z-index: 2; display: flex; flex-direction: column; align-items: center; justify-content: center; background: linear-gradient(#fff2c6, #f7dda0); color: #35121c; gap: .12cqw; padding: 0 .1cqw; text-align: center; }
+.glowing-caption > span { font: .64cqw/1.15 Georgia, serif; }
+.glowing-caption > span[lang='am'] { font-family: 'Mezmure Ethiopic', serif; font-size: .70cqw; }
+
+.glowing-caption-hero > span { font-size: 1.25cqw; }
+.glowing-caption-hero > span[lang='am'] { font-size: 1.6cqw; }
