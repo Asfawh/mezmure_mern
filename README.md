@@ -19,8 +19,8 @@ EOTC Mezmure song library built with React, Express, and MongoDB Atlas.
    npm run dev
    ```
 
-The client runs at `http://localhost:5173`; Vite proxies `/api` requests to the
-Express API at `http://localhost:8004`.
+The client runs at `http://127.0.0.1:5174`; Vite proxies `/api` requests to the
+Express API at `http://127.0.0.1:8005`.
 
 ## Production deployment
 
