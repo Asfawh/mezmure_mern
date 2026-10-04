@@ -54,7 +54,6 @@ function MainList() {
       song.artistName,
       song.genre,
       getDisplayedMezmureSource(song),
-      song.verses,
     ]
       .filter(Boolean)
       .some((value) => value.toLowerCase().includes(query));
@@ -171,8 +170,8 @@ function MainList() {
             type="search"
             value={searchValue}
             onChange={(event) => setSearchValue(event.target.value)}
-            placeholder="Search title, Zemari, genre, source, or verses…"
-            aria-label="Search the Mezmure library"
+            placeholder="Search title, Zemari, genre, or source…"
+            aria-label="Search Mezmure titles and catalog details"
           />
           {query && (
             <button type="button" className="library-search-clear" onClick={clearSearch}>
