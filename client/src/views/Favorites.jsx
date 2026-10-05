@@ -74,12 +74,12 @@ function Favorites() {
       <section className="favorites-page">
         <div className="favorites-hero">
           <span className="eyebrow">Your personal collection</span>
-          <h1>Favorite Mezmure</h1>
-          <p>Log in to Like or Love Mezmure and keep them together here.</p>
+          <h1>Favorite Mezmur</h1>
+          <p>Log in to Like or Love Mezmur and keep them together here.</p>
         </div>
         <div className="favorites-empty">
           <strong>Sign in to see your favorites.</strong>
-          <Link to="/songs">Explore the Mezmure library</Link>
+          <Link to="/songs">Explore the Mezmur library</Link>
         </div>
       </section>
     );
@@ -89,9 +89,9 @@ function Favorites() {
     <section className="favorites-page">
       <div className="favorites-hero">
         <span className="eyebrow">Your personal collection</span>
-        <h1>Favorite Mezmure</h1>
+        <h1>Favorite Mezmur</h1>
         <p>
-          Every Mezmure you Like or Love is saved here, with your newest
+          Every Mezmur you Like or Love is saved here, with your newest
           favorites first.
         </p>
         <span className="favorites-count">
@@ -105,8 +105,8 @@ function Favorites() {
       {isLoaded && !loadError && favorites.length === 0 && (
         <div className="favorites-empty">
           <strong>Your favorites list is waiting.</strong>
-          <span>Choose Like or Love on any Mezmure to save it here.</span>
-          <Link to="/songs">Browse Mezmure</Link>
+          <span>Choose Like or Love on any Mezmur to save it here.</span>
+          <Link to="/songs">Browse Mezmur</Link>
         </div>
       )}
 

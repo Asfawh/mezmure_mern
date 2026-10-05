@@ -29,7 +29,7 @@ const SearchResults = ({ query }) => {
         })
         .catch((err) => {
           console.error('Error in search:', err);
-          setErrors('No Mezmure found');
+          setErrors('No Mezmur found');
           setLoading(false); // Stop loading on error as well
         });
     }
@@ -39,7 +39,7 @@ const SearchResults = ({ query }) => {
 
   // If it's still loading
   if (loading) {
-    return <p className="text-center mt-3">Loading Mezmure...</p>;
+    return <p className="text-center mt-3">Loading Mezmur...</p>;
   }
   // If an error occurred
   if (errors) {
@@ -50,7 +50,7 @@ const SearchResults = ({ query }) => {
   if (!songData || Object.keys(songData).length === 0) {
     return (
       <p className="text-center mt-3">
-        No Mezmure found for the query "{query}".
+        No Mezmur found for the query "{query}".
       </p>
     );
   }

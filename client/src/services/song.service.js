@@ -58,11 +58,11 @@ const SONG_SERVICE = {
       const res = await http.get(`/search?query=${searchQuery}`);
       console.log('Search Results:', res.data); // Log the entire response array
       if (res.data.length === 0) {
-        throw new Error('No Mezmure found');
+        throw new Error('No Mezmur found');
       }
       return withMezmureGenre(res.data[0]);
     } catch (err) {
-      console.error('Error fetching Mezmure:', err);
+      console.error('Error fetching Mezmur:', err);
       throw err;
     }
   },

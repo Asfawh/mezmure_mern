@@ -21,8 +21,8 @@ function Main() {
     <>
       <section className="workspace-hero">
         <span className="eyebrow">Community collection</span>
-        <h1>Add and manage Mezmure</h1>
-        <p>Preserve a Mezmure by adding its title, tradition, source, and complete verses.</p>
+        <h1>Add and manage Mezmur</h1>
+        <p>Preserve a Mezmur by adding its title, tradition, source, and complete verses.</p>
       </section>
       <section className="song-workspace">
         <div className="song-workspace-form">

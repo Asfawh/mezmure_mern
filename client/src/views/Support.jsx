@@ -15,7 +15,7 @@ const supportAreas = [
   {
     number: '03',
     title: 'Preservation & growth',
-    description: 'New Mezmure and better tools for the community.',
+    description: 'New Mezmur and better tools for the community.',
   },
 ];
 
@@ -24,10 +24,10 @@ function Support() {
     <div className="support-page">
       <section className="support-hero" aria-labelledby="support-title">
         <div className="support-hero-copy">
-          <span className="eyebrow">Keep Mezmure online</span>
-          <h1 id="support-title">Support Mezmure.</h1>
+          <span className="eyebrow">Keep Mezmur online</span>
+          <h1 id="support-title">Support Mezmur.</h1>
           <p>
-            Help us preserve and share Ethiopian Orthodox Mezmure. Your gift
+            Help us preserve and share Ethiopian Orthodox Mezmur. Your gift
             keeps the library online, secure, and growing.
           </p>
           <p className="support-amharic" lang="am">
@@ -41,7 +41,7 @@ function Support() {
           <span className="eyebrow">Your support</span>
           <h2>What your gift supports</h2>
           <p className="support-intro">
-            Contributions help operate and improve Mezmure.org.
+            Contributions help operate and improve Mezmur.
           </p>
           <div className="support-area-list">
             {supportAreas.map((area) => (
@@ -78,7 +78,7 @@ function Support() {
             <div className="support-setup-note" role="status">
               <strong>Online contributions are being prepared.</strong>
               <span>
-                Contact us for the available ways to support Mezmure.
+                Contact us for the available ways to support Mezmur.
               </span>
               <a href="mailto:chosky05@gmail.com?subject=Supporting%20the%20Mezmure%20initiative">
                 Contact us to support
@@ -87,7 +87,7 @@ function Support() {
           )}
 
           <p className="support-security-note">
-            Mezmure.org does not collect or store card details. Contributions
+            Mezmur does not collect or store card details. Contributions
             are not represented as tax-deductible unless an eligible
             organization provides a receipt stating otherwise.
           </p>

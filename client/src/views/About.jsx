@@ -8,14 +8,14 @@ const commitments = [
 ];
 
 function About() {
-  usePageMeta('About Us', 'Learn about the EOTC Mezmure library, its preservation mission, editorial approach, and community commitments.', '/about');
+  usePageMeta('About Us', 'Learn about the EOTC Mezmur library, its preservation mission, editorial approach, and community commitments.', '/about');
 
   return (
     <div className="trust-page">
       <header className="trust-hero trust-hero-image">
-        <span className="eyebrow">About EOTC Mezmure</span>
+        <span className="eyebrow">About EOTC Mezmur</span>
         <h1>Preserving sacred words across generations.</h1>
-        <p>EOTC Mezmure is an independent community library created to make Ethiopian Orthodox Tewahedo mezmur lyrics, verses, Zemari profiles, languages, and traditions easier to discover and preserve.</p>
+        <p>EOTC Mezmur is an independent community library created to make Ethiopian Orthodox Tewahedo mezmur lyrics, verses, Zemari profiles, languages, and traditions easier to discover and preserve.</p>
       </header>
 
       <section className="trust-section trust-story" aria-labelledby="our-story-title">
@@ -48,7 +48,7 @@ function About() {
           <h2>Help strengthen the library.</h2>
           <p>Suggest a correction, share a reliable source, or ask about a rights concern.</p>
         </div>
-        <Link className="trust-action" to="/contact">Contact Mezmure</Link>
+        <Link className="trust-action" to="/contact">Contact Mezmur</Link>
       </section>
     </div>
   );

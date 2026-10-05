@@ -30,10 +30,10 @@ const Search = () => {
       <FormControl
         type="text"
         name="search"
-        placeholder="Search by Mezmure name"
+        placeholder="Search by Mezmur name"
         className="nav-search-input"
         value={query}
-        aria-label="Search Mezmure"
+        aria-label="Search Mezmur"
         onChange={(e) => setQuery(e.target.value)}
       />
 

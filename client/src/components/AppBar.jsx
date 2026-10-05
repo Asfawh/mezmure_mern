@@ -25,8 +25,8 @@ function AppBar() {
           <Navbar.Brand className="brand-lockup">
             <MezmureLogo />
             <span>
-              <strong>EOTC Mezmure</strong>
-              <small>Sacred Mezmure &amp; verses</small>
+              <strong>EOTC Mezmur</strong>
+              <small>Sacred Mezmur &amp; verses</small>
             </span>
           </Navbar.Brand>
         </LinkContainer>
@@ -34,19 +34,19 @@ function AppBar() {
         <Navbar.Collapse id="nav-menu">
           <Nav className="me-auto site-nav-links">
             <LinkContainer to="/songs">
-              <Nav.Link>Mezmure Library</Nav.Link>
-            </LinkContainer>
-            <LinkContainer to="/sacred-art">
-              <Nav.Link>Sacred Art</Nav.Link>
+              <Nav.Link>Mezmur Library</Nav.Link>
             </LinkContainer>
             <LinkContainer to="/favorites">
               <Nav.Link>My Favorites</Nav.Link>
             </LinkContainer>
-            {state.user && <LinkContainer to="/songs/new"><Nav.Link>Add Mezmure</Nav.Link></LinkContainer>}
+            {state.user && <LinkContainer to="/songs/new"><Nav.Link>Add Mezmur</Nav.Link></LinkContainer>}
+            <LinkContainer to="/sacred-art">
+              <Nav.Link>Sacred Art</Nav.Link>
+            </LinkContainer>
           </Nav>
           <Nav className="nav-utility site-nav-links">
-            <LinkContainer to="/contact"><Nav.Link>Contact</Nav.Link></LinkContainer>
             <LinkContainer to="/about"><Nav.Link>About</Nav.Link></LinkContainer>
+            <LinkContainer to="/contact"><Nav.Link>Contact</Nav.Link></LinkContainer>
             <LinkContainer to="/support">
               <Nav.Link className="support-nav-link">
                 <span aria-hidden="true">♥</span>

@@ -55,7 +55,7 @@ const UpdateForm = () => {
   return (
     <div className="card shadow">
       <h3 className="card-header text-center">Edit</h3>
-      <p className="text-center mt-3">Edit Mezmure</p>
+      <p className="text-center mt-3">Edit Mezmur</p>
       <div className="card-body">
         <form onSubmit={handleSubmit}>
           <div className="mb-3">
@@ -63,7 +63,7 @@ const UpdateForm = () => {
               <p className="error">{errors.songName.message}</p>
             )}
             <label htmlFor="songName" className="form-label">
-              Mezmure Name:
+              Mezmur Name:
             </label>
             <input
               type="text"

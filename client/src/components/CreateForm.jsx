@@ -59,7 +59,7 @@ const CreateForm = ({ setIsLoaded }) => {
     if (trimmedName.length < 2) {
       setErrors((previousErrors) => ({
         ...previousErrors,
-        songName: { message: 'Enter a Mezmure name of at least two characters.' },
+        songName: { message: 'Enter a Mezmur name of at least two characters.' },
       }));
       return false;
     }
@@ -74,7 +74,7 @@ const CreateForm = ({ setIsLoaded }) => {
       if (result.exists) {
         setErrors((previousErrors) => ({
           ...previousErrors,
-          songName: { message: result.message || 'Mezmure already exists.' },
+          songName: { message: result.message || 'Mezmur already exists.' },
         }));
         return false;
       }
@@ -116,7 +116,7 @@ const CreateForm = ({ setIsLoaded }) => {
       await SONG_SERVICE.createSong(trimmedSong);
       setSong(initialSong);
       setValidated(false);
-      setSuccessMessage('Mezmure added to the library.');
+      setSuccessMessage('Mezmur added to the library.');
       setIsLoaded(false);
     } catch (err) {
       const responseErrors = err.response?.data?.errors || {};
@@ -138,8 +138,8 @@ const CreateForm = ({ setIsLoaded }) => {
       <div className="editor-card-header">
         <span className="editor-step">01</span>
         <div>
-          <h2>Create Mezmure</h2>
-          <p>Fields marked required help visitors find and read the Mezmure.</p>
+          <h2>Create Mezmur</h2>
+          <p>Fields marked required help visitors find and read the Mezmur.</p>
         </div>
       </div>
       <div className="editor-card-body">
@@ -147,7 +147,7 @@ const CreateForm = ({ setIsLoaded }) => {
         <form noValidate className={validated ? 'was-validated' : ''} onSubmit={handleSubmit}>
           <div className="mb-3">
             <label htmlFor="songName" className="form-label">
-              Mezmure name *
+              Mezmur name *
             </label>
             <input
               type="text"
@@ -166,9 +166,9 @@ const CreateForm = ({ setIsLoaded }) => {
               id="songNameFeedback"
               className={`invalid-feedback ${errors.songName ? 'd-block' : ''}`}
             >
-              {errors.songName?.message || 'Enter a Mezmure name of at least two characters.'}
+              {errors.songName?.message || 'Enter a Mezmur name of at least two characters.'}
             </div>
-            {isCheckingName && <div className="form-text">Checking the Mezmure library…</div>}
+            {isCheckingName && <div className="form-text">Checking the Mezmur library…</div>}
           </div>
 
           <div className="mb-3">
@@ -241,12 +241,12 @@ const CreateForm = ({ setIsLoaded }) => {
               required
               rows={9}
             />
-            <div className="invalid-feedback">Enter the Mezmure verses.</div>
+            <div className="invalid-feedback">Enter the Mezmur verses.</div>
           </div>
           <div className="editor-actions">
-            <span>Your Mezmure will receive the next Mezmure number automatically.</span>
+            <span>Your Mezmur will receive the next Mezmur number automatically.</span>
             <button type="submit" className="btn btn-primary" disabled={isSubmitting}>
-              {isSubmitting ? 'Adding Mezmure…' : 'Add to library'}
+              {isSubmitting ? 'Adding Mezmur…' : 'Add to library'}
             </button>
           </div>
         </form>

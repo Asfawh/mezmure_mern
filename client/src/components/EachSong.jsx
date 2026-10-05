@@ -50,11 +50,11 @@ function EachSong({
       <div className="song-card-accent" aria-hidden="true"></div>
       <Card.Body>
         <div className="song-card-topline">
-          <span className="genre-pill">{song.genre || 'Mezmure'}</span>
+          <span className="genre-pill">{song.genre || 'Mezmur'}</span>
           {song.pageNumber && (
             <span
               className="mezmure-number"
-              aria-label={`Mezmure number ${song.pageNumber}`}
+              aria-label={`Mezmur number ${song.pageNumber}`}
             >
               M#{song.pageNumber}
             </span>
@@ -81,7 +81,7 @@ function EachSong({
             className={`reaction-button ${song.userReaction === 'like' ? 'is-active is-like' : ''}`}
             aria-pressed={song.userReaction === 'like'}
             disabled={!canReact || reactionBusy}
-            title={canReact ? 'Like this Mezmure' : 'Log in to Like this Mezmure'}
+            title={canReact ? 'Like this Mezmur' : 'Log in to Like this Mezmur'}
             onClick={() => onReaction?.(song, 'like')}
           >
             <span aria-hidden="true">👍</span>
@@ -93,7 +93,7 @@ function EachSong({
             className={`reaction-button ${song.userReaction === 'love' ? 'is-active is-love' : ''}`}
             aria-pressed={song.userReaction === 'love'}
             disabled={!canReact || reactionBusy}
-            title={canReact ? 'Love this Mezmure' : 'Log in to Love this Mezmure'}
+            title={canReact ? 'Love this Mezmur' : 'Log in to Love this Mezmur'}
             onClick={() => onReaction?.(song, 'love')}
           >
             <span aria-hidden="true">♥</span>
@@ -105,7 +105,7 @@ function EachSong({
       </Card.Body>
       <Card.Footer>
         <Link to={`/songs/${song._id}`} className="song-link">
-          Read Mezmure <span aria-hidden="true">→</span>
+          Read Mezmur <span aria-hidden="true">→</span>
         </Link>
       </Card.Footer>
     </Card>

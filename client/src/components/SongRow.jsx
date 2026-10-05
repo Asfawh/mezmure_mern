@@ -13,7 +13,7 @@ function SongRow({ song, setIsLoaded }) {
   } = useContext(AuthContext);
   const displayedSource = getDisplayedMezmureSource(song);
   const removeSong = async (id) => {
-    if (!window.confirm('Remove this Mezmure from the library?')) return;
+    if (!window.confirm('Remove this Mezmur from the library?')) return;
     await SONG_SERVICE.deleteSongById(id);
     setIsLoaded(false);
   };

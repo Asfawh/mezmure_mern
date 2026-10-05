@@ -57,7 +57,7 @@ function AccountBar() {
       <Container>
         <div className="account-strip-inner">
           <span className="account-welcome">
-            {username ? `Welcome back, ${username}` : 'Join the community to add and manage Mezmure'}
+            {username ? `Welcome back, ${username}` : 'Join the community to add and manage Mezmur'}
           </span>
           <div className="account-actions">
           <Search />

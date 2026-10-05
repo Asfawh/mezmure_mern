@@ -4,11 +4,11 @@ const contactReasons = [
   ['Corrections', 'Report an incorrect mezmur title, Zemari, lyric, language, category, verse, or translation.'],
   ['Rights & attribution', 'Clergy, creators, publishers, photographers, and rights holders may request review, attribution changes, or removal.'],
   ['Contributions', 'Suggest a mezmur, Zemari profile, translation, spiritual context, image, or reliable source.'],
-  ['General questions', 'Ask about Mezmure.org, partnerships, accessibility, donations, or technical issues.'],
+  ['General questions', 'Ask about Mezmur, partnerships, accessibility, donations, or technical issues.'],
 ];
 
 function Contact() {
-  usePageMeta('Contact Us', 'Contact Mezmure.org about corrections, contributions, copyright, attribution, partnerships, or support.', '/contact');
+  usePageMeta('Contact Us', 'Contact Mezmur about corrections, contributions, copyright, attribution, partnerships, or support.', '/contact');
 
   return (
     <div className="trust-page">
@@ -27,7 +27,7 @@ function Contact() {
           <span className="eyebrow">Email</span>
           <h2>chosky05@gmail.com</h2>
           <p>We review messages as promptly as possible. Rights and safety concerns receive priority.</p>
-          <a className="trust-action" href="mailto:chosky05@gmail.com?subject=Mezmure.org%20inquiry">Send an email</a>
+          <a className="trust-action" href="mailto:chosky05@gmail.com?subject=Mezmur%20inquiry">Send an email</a>
           <div className="contact-phone">
             <span className="eyebrow">Phone</span>
             <a href="tel:+12409206006">(240) 920-6006</a>

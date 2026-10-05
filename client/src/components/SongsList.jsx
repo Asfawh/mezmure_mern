@@ -6,15 +6,15 @@ function SongsList({ songs, setIsLoaded }) {
       <div className="manager-card-header">
         <span className="editor-step">02</span>
         <div>
-          <h2>All Mezmure</h2>
-          <p>{songs.length} Mezmure in the collection</p>
+          <h2>All Mezmur</h2>
+          <p>{songs.length} Mezmur in the collection</p>
         </div>
       </div>
       <div className="manager-table-wrap">
         <table className="table manager-table">
           <thead>
             <tr>
-              <th>Mezmure</th>
+              <th>Mezmur</th>
               <th>Zemari</th>
               <th>Genre</th>
               <th>Source</th>

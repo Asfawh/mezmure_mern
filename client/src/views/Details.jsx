@@ -24,7 +24,7 @@ function Details() {
         setSong(res);
         setLoadError('');
       })
-      .catch(() => setLoadError('This Mezmure could not be loaded. Please try again.'));
+      .catch(() => setLoadError('This Mezmur could not be loaded. Please try again.'));
   }, [id]);
 
   useEffect(() => {
@@ -73,7 +73,7 @@ function Details() {
     return (
       <div className="lyrics-status">
         <strong>{loadError}</strong>
-        <Link to="/songs">Return to the Mezmure library</Link>
+        <Link to="/songs">Return to the Mezmur library</Link>
       </div>
     );
   }
@@ -89,17 +89,17 @@ function Details() {
   return (
     <article className="lyrics-page">
       <Link to="/songs" className="lyrics-back">
-        <span aria-hidden="true">←</span> Back to Mezmure library
+        <span aria-hidden="true">←</span> Back to Mezmur library
       </Link>
 
       <header className="lyrics-header">
-        <span className="eyebrow">Mezmure lyrics</span>
+        <span className="eyebrow">Mezmur lyrics</span>
         <h1>{song.songName}</h1>
         <div className="lyrics-meta">
           <span>{song.artistName || 'Traditional'}</span>
           {song.genre && <span>{song.genre}</span>}
           {song.pageNumber && (
-            <span aria-label={`Mezmure number ${song.pageNumber}`}>
+            <span aria-label={`Mezmur number ${song.pageNumber}`}>
               M#{song.pageNumber}
             </span>
           )}
@@ -189,7 +189,7 @@ function Details() {
 
         <div className="lyrics-stage-footer">
           <span>Use the ← and → arrow keys to move between parts</span>
-          <Link to="/songs">Explore more Mezmure</Link>
+          <Link to="/songs">Explore more Mezmur</Link>
         </div>
       </section>
 
