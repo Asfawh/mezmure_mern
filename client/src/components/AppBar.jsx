@@ -13,7 +13,6 @@ import { LinkContainer } from 'react-router-bootstrap';
 
 /* local */
 import { AuthContext } from '../context/AuthContext';
-import Search from './Search';
 import MezmureLogo from './MezmureLogo';
 
 function AppBar() {
@@ -40,36 +39,21 @@ function AppBar() {
             <LinkContainer to="/sacred-art">
               <Nav.Link>Sacred Art</Nav.Link>
             </LinkContainer>
-            <LinkContainer to="/about">
-              <Nav.Link>About</Nav.Link>
+            <LinkContainer to="/favorites">
+              <Nav.Link>My Favorites</Nav.Link>
             </LinkContainer>
-            <LinkContainer to="/contact">
-              <Nav.Link>Contact</Nav.Link>
-            </LinkContainer>
-            {state.user && (
-              <>
-                <LinkContainer to="/favorites">
-                  <Nav.Link>My Favorites</Nav.Link>
-                </LinkContainer>
-                <LinkContainer to="/songs/new">
-                  <Nav.Link>Add Mezmure</Nav.Link>
-                </LinkContainer>
-              </>
-            )}
+            {state.user && <LinkContainer to="/songs/new"><Nav.Link>Add Mezmure</Nav.Link></LinkContainer>}
           </Nav>
-          <div className="nav-utility">
-            <Nav.Link className="companion-nav-link" href="https://zemaverse.com/">
-              <span aria-hidden="true">↔</span>
-              Visit ZemaVerse
-            </Nav.Link>
+          <Nav className="nav-utility site-nav-links">
+            <LinkContainer to="/contact"><Nav.Link>Contact</Nav.Link></LinkContainer>
+            <LinkContainer to="/about"><Nav.Link>About</Nav.Link></LinkContainer>
             <LinkContainer to="/support">
               <Nav.Link className="support-nav-link">
                 <span aria-hidden="true">♥</span>
                 Donate
               </Nav.Link>
             </LinkContainer>
-            <Search />
-          </div>
+          </Nav>
         </Navbar.Collapse>
       </Container>
     </Navbar>
