@@ -19,6 +19,10 @@ function MainList() {
   const [reactionError, setReactionError] = useState('');
   const [busySongId, setBusySongId] = useState(null);
   const [searchParams, setSearchParams] = useSearchParams();
+  const sharedIds = useMemo(() => [...new Set((searchParams.get('study') || '').split(',').filter(id => /^[a-f0-9]{24}$/i.test(id)))].slice(0, 30), [searchParams]);
+  const [selectedIds, setSelectedIds] = useState(sharedIds);
+  const [shareStatus, setShareStatus] = useState('');
+  const [shareUrl, setShareUrl] = useState('');
   const [searchValue, setSearchValue] = useState(searchParams.get('query') || '');
   const {
     state: { user },
@@ -48,6 +52,7 @@ function MainList() {
 
   const query = searchParams.get('query')?.trim().toLowerCase() || '';
   const visibleSongs = useMemo(() => songs.filter((song) => {
+    if (searchParams.has('study') && !sharedIds.includes(song._id)) return false;
     if (!query) return true;
     return [
       song.songName,
@@ -58,7 +63,7 @@ function MainList() {
     ]
       .filter(Boolean)
       .some((value) => value.toLowerCase().includes(query));
-  }), [songs, query]);
+  }), [songs, query, sharedIds, searchParams]);
 
   useEffect(() => {
     setSearchValue(searchParams.get('query') || '');
@@ -67,12 +72,44 @@ function MainList() {
   const handleSearch = (event) => {
     event.preventDefault();
     const value = searchValue.trim();
-    setSearchParams(value ? { query: value } : {});
+    const next = new URLSearchParams(searchParams);
+    if (value) next.set('query', value); else next.delete('query');
+    setSearchParams(next);
   };
 
   const clearSearch = () => {
     setSearchValue('');
-    setSearchParams({});
+    const next = new URLSearchParams(searchParams);
+    next.delete('query');
+    setSearchParams(next);
+  };
+
+  const toggleSelection = (id) => {
+    setShareUrl('');
+    setShareStatus('');
+    setSelectedIds(current => current.includes(id) ? current.filter(item => item !== id) : current.length < 30 ? [...current, id] : current);
+  };
+
+  const shareSelection = async () => {
+    const url = new URL('/songs', window.location.origin);
+    url.searchParams.set('study', selectedIds.join(','));
+    setShareUrl(url.href);
+    setShareStatus('');
+    if (navigator.share) {
+      try {
+        await navigator.share({ title: 'Weekly Mezmure study', text: `${selectedIds.length} Mezmure for this week’s study`, url: url.href });
+        setShareStatus('Study list shared.');
+        return;
+      } catch (error) {
+        if (error.name === 'AbortError') return;
+      }
+    }
+    try {
+      await navigator.clipboard.writeText(url.href);
+      setShareStatus('Study link copied. Send it to your students.');
+    } catch {
+      setShareStatus('Select and copy the study link below.');
+    }
   };
 
   const handleReaction = async (song, kind) => {
@@ -140,7 +177,7 @@ function MainList() {
       <aside className="sacred-art-invitation" aria-label="Explore sacred art">
         <img src="/assets/sacred-art/17.webp" alt="" width="96" height="72" />
         <div>
-          <span lang="am">የቤተ ክርስቲያን ሥዕሎች</span>
+          <span lang="am">የቅዱሳነ ምሥዕሎች</span>
           <p>Discover the sacred art of our tradition, with Amharic and English names.</p>
         </div>
         <Link to="/sacred-art">Explore the collection <span aria-hidden="true">→</span></Link>
@@ -187,6 +224,18 @@ function MainList() {
           </p>
         )}
 
+        <div className={styles.studyPanel}>
+          <div><strong>{searchParams.has('study') ? 'Shared weekly study' : 'Weekly Mezmure study'}</strong><p>Select up to 30 Mezmure, then share one link with your class. No sign-in needed.</p></div>
+          {searchParams.has('study') && <Link to="/songs">Browse all Mezmure</Link>}
+          {isLoaded && sharedIds.some(id => !songs.some(song => song._id === id)) && <p role="status">Some Mezmure in this shared list are no longer available.</p>}
+          <div className={styles.studyActions}>
+            <span>{selectedIds.length} selected</span>
+            <button type="button" disabled={!selectedIds.length} onClick={shareSelection}>Share study link</button>
+            <button type="button" disabled={!selectedIds.length} onClick={() => { setSelectedIds([]); setShareUrl(''); setShareStatus(''); }}>Clear selection</button>
+          </div>
+          {shareUrl && <label>Study link<input aria-label="Study link" readOnly value={shareUrl} onFocus={event => event.target.select()} /></label>}
+          <span role="status">{shareStatus}</span>
+        </div>
         {reactionError && <div className="alert alert-danger">{reactionError}</div>}
         {!isLoaded && <div className="empty-state">Loading the Mezmure library…</div>}
         {loadError && <div className="alert alert-danger">{loadError}</div>}
@@ -198,13 +247,15 @@ function MainList() {
         )}
         <div className={styles.grid}>
           {visibleSongs.map((song) => (
+            <div key={song._id} className={styles.selectableSong}>
+            <label className={styles.songSelect}><input type="checkbox" checked={selectedIds.includes(song._id)} disabled={selectedIds.length >= 30 && !selectedIds.includes(song._id)} onChange={() => toggleSelection(song._id)} /> Select {song.songName}</label>
             <EachSong
-              key={song._id}
               song={song}
               user={user}
               onReaction={handleReaction}
               reactionBusy={Boolean(busySongId)}
             />
+            </div>
           ))}
         </div>
       </section>

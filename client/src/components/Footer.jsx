@@ -11,8 +11,8 @@ function Footer() {
         </div>
         <nav aria-label="Footer navigation">
           <Link to="/songs">Mezmure Library</Link>
-          <Link to="/about">About Us</Link>
           <Link to="/sacred-art">Sacred Art</Link>
+          <Link to="/about">About Us</Link>
           <Link to="/contact">Contact Us</Link>
           <Link to="/support">Support Mezmure</Link>
           <Link to="/privacy">Privacy</Link>

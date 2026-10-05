@@ -61,3 +61,8 @@
 
 .glowing-caption-hero > span { font-size: 1.25cqw; }
 .glowing-caption-hero > span[lang='am'] { font-size: 1.6cqw; }
+
+.sacred-art-print button.sacred-art-download { border: 0; margin-right: .5rem; }
+.sacred-art-modal .art-zoomed { overflow: auto; }
+.sacred-art-modal .art-zoomed .glowing-collection { min-width: 1448px; }
+.sacred-art-modal .modal-fullscreen .modal-body { overflow: auto; }
