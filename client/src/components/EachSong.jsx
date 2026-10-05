@@ -105,7 +105,7 @@ function EachSong({
       </Card.Body>
       <Card.Footer>
         <Link to={`/songs/${song._id}`} className="song-link">
-          View Mezmure <span aria-hidden="true">→</span>
+          View Mezmur <span aria-hidden="true">→</span>
         </Link>
       </Card.Footer>
     </Card>
