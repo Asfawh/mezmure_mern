@@ -124,7 +124,7 @@ function Details() {
               aria-label={isFullscreen ? 'Exit full screen' : 'Open full screen'}
             >
               <span aria-hidden="true">{isFullscreen ? '✕' : '⛶'}</span>
-              {isFullscreen ? 'Exit' : 'Full screen'}
+              {isFullscreen ? 'Exit full screen' : 'Full-screen lyrics'}
             </button>
           )}
         </div>

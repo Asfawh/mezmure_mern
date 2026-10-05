@@ -709,15 +709,32 @@ a:hover { color: var(--wine); }
 }
 .lyrics-back:hover { gap: 0.7rem; color: var(--wine-soft); }
 .lyrics-header {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
   margin-bottom: 1.5rem;
   padding: clamp(1.65rem, 4vw, 2.8rem);
+  border: 1px solid rgba(244, 196, 48, 0.42);
   border-radius: 24px;
   background:
-    radial-gradient(circle at 90% 12%, rgba(210, 168, 74, 0.23), transparent 16rem),
-    linear-gradient(120deg, var(--wine-dark), var(--wine));
+    linear-gradient(90deg, rgba(53, 12, 27, 0.98) 0%, rgba(91, 23, 44, 0.94) 54%, rgba(91, 23, 44, 0.62) 100%),
+    url('/assets/sacred-art/glowing-collection.png') center / cover;
   color: #fff;
   text-align: center;
-  box-shadow: 0 18px 42px rgba(45, 13, 23, 0.16);
+  box-shadow: 0 18px 42px rgba(45, 13, 23, 0.24), inset 0 0 0 6px rgba(244, 196, 48, 0.07);
+}
+.lyrics-header::before {
+  position: absolute;
+  inset: 10px;
+  z-index: -1;
+  border: 1px solid rgba(244, 196, 48, 0.3);
+  border-radius: 17px;
+  content: "✣";
+  color: rgba(244, 196, 48, 0.22);
+  font-size: 7rem;
+  line-height: 1;
+  text-align: right;
+  pointer-events: none;
 }
 .lyrics-header .eyebrow { color: var(--gold-light); }
 .lyrics-header h1 {
@@ -746,20 +763,32 @@ a:hover { color: var(--wine); }
 .lyrics-stage {
   --lyrics-stage-bg: #f7efe1;
   position: relative;
+  isolation: isolate;
   overflow: hidden;
-  border: 1px solid #cfbea7;
+  border: 2px solid rgba(130, 32, 54, 0.34);
   border-radius: 28px;
   background:
+    linear-gradient(135deg, rgba(211, 33, 44, 0.045), transparent 28%, rgba(7, 137, 48, 0.045) 72%, rgba(244, 196, 48, 0.08)),
     radial-gradient(circle at 12% 18%, rgba(203, 156, 54, 0.12), transparent 15rem),
     radial-gradient(circle at 88% 82%, rgba(84, 28, 43, 0.1), transparent 18rem),
     var(--lyrics-stage-bg);
-  box-shadow: 0 28px 70px rgba(67, 34, 39, 0.14);
+  box-shadow: 0 28px 70px rgba(67, 34, 39, 0.18), 0 0 0 6px rgba(244, 196, 48, 0.08);
 }
 .lyrics-stage::before {
   position: absolute;
   inset: 12px;
   border: 1px solid rgba(142, 103, 46, 0.18);
   border-radius: 20px;
+  content: "";
+  pointer-events: none;
+}
+.lyrics-stage::after {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: 5px;
+  background: linear-gradient(90deg, #d3212c 0 33.33%, #f4c430 33.33% 66.66%, #078930 66.66%);
   content: "";
   pointer-events: none;
 }
@@ -804,6 +833,7 @@ a:hover { color: var(--wine); }
   color: var(--wine);
   font-size: 0.76rem;
   font-weight: 850;
+  white-space: nowrap;
 }
 .lyrics-fullscreen:hover { border-color: var(--wine); background: #fff; }
 .lyrics-slide {
@@ -1176,8 +1206,9 @@ a:hover { color: var(--wine); }
   .lyrics-stage { border-radius: 18px; }
   .lyrics-stage::before { inset: 7px; border-radius: 13px; }
   .lyrics-stage-toolbar { padding: 1rem; }
+  .lyrics-stage-toolbar { align-items: flex-start; gap: 0.7rem; }
   .lyrics-stage-toolbar h2 { max-width: 58vw; }
-  .lyrics-fullscreen { min-height: 38px; padding: 0.5rem 0.7rem; }
+  .lyrics-fullscreen { min-height: 38px; padding: 0.5rem 0.62rem; font-size: 0.68rem; }
   .lyrics-slide {
     min-height: 390px;
     padding: 3.25rem 1.2rem;
@@ -1192,6 +1223,12 @@ a:hover { color: var(--wine); }
   .support-impact-card,
   .support-checkout-card { border-radius: 18px; }
   .support-thanks { align-items: flex-start; }
+}
+
+@media (max-width: 390px) {
+  .lyrics-stage-toolbar { align-items: stretch; flex-direction: column; }
+  .lyrics-stage-toolbar h2 { max-width: 100%; }
+  .lyrics-fullscreen { justify-content: center; }
 }
 
 @media (max-width: 900px) and (orientation: landscape) {
