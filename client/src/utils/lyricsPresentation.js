@@ -14,6 +14,37 @@ function normalizeLyrics(value = '') {
     .trim();
 }
 
+// Some imported mezmure entries contain an entire stanza in one physical line.
+// Turn sentence boundaries (and very long unpunctuated runs) into display lines
+// before pagination so a short song does not render as one oversized sentence.
+function expandInlineLines(lines) {
+  return lines.flatMap((line) => {
+    const sentenceLines = line
+      .split(/(?<=[።.!?])\s+/u)
+      .map((part) => part.trim())
+      .filter(Boolean);
+
+    return sentenceLines.flatMap((sentence) => {
+      if (sentence.length <= 120) return [sentence];
+
+      const words = sentence.split(/\s+/u);
+      const chunks = [];
+      let chunk = '';
+      words.forEach((word) => {
+        const candidate = chunk ? `${chunk} ${word}` : word;
+        if (chunk && candidate.length > 120) {
+          chunks.push(chunk);
+          chunk = word;
+        } else {
+          chunk = candidate;
+        }
+      });
+      if (chunk) chunks.push(chunk);
+      return chunks;
+    });
+  });
+}
+
 function splitLongSection(lines) {
   const slides = [];
   let currentSlide = [];
@@ -74,19 +105,20 @@ export function buildLyricsSlides(value = '', title = '') {
         .split('\n')
         .map((line) => line.trim())
         .filter(Boolean);
+      const expandedLines = expandInlineLines(lines);
       const previous = merged[merged.length - 1];
-      const isStandaloneHeading = lines.length === 1 && isLyricsHeading(lines[0]);
+      const isStandaloneHeading = expandedLines.length === 1 && isLyricsHeading(expandedLines[0]);
 
       // Keep a chorus/refrain marker with the lyrics that follow it instead of
       // allowing the marker to become a page by itself.
       if (isStandaloneHeading && previous) {
-        merged.push(lines);
+        merged.push(expandedLines);
       } else if (isStandaloneHeading && !previous) {
-        merged.push(lines);
+        merged.push(expandedLines);
       } else if (previous?.length === 1 && isLyricsHeading(previous[0])) {
-        merged[merged.length - 1] = [...previous, ...lines];
+        merged[merged.length - 1] = [...previous, ...expandedLines];
       } else {
-        merged.push(lines);
+        merged.push(expandedLines);
       }
       return merged;
     }, [])
