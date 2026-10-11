@@ -9,6 +9,7 @@ export const isLyricsHeading = (line = '') => (
 function normalizeLyrics(value = '') {
   return value
     .replace(/\r\n?/g, '\n')
+    .replace(/አዝ(?:ማች)?[\s\-‑–—_·.።…]+(?=\n|$)/gu, '\n\nአዝ\n\n')
     .replace(/[ \t]{3,}/g, '\n\n')
     .replace(/([^\n])\s+(?=አዝ(?:ማች)?(?:[\s.:፡።…—–-]|$))/gu, '$1\n\n')
     .trim();
@@ -92,11 +93,31 @@ function foldLeadingTitle(slides, title = '') {
   return slides;
 }
 
+function mergeShortSections(sections) {
+  return sections.reduce((merged, section) => {
+    const previous = merged[merged.length - 1];
+    const sectionStartsHeading = isLyricsHeading(section[0]);
+    const previousStartsHeading = previous && isLyricsHeading(previous[0]);
+
+    if (
+      previous &&
+      !sectionStartsHeading &&
+      !previousStartsHeading &&
+      previous.length + section.length <= MAX_LINES_PER_SLIDE
+    ) {
+      merged[merged.length - 1] = [...previous, ...section];
+    } else {
+      merged.push(section);
+    }
+    return merged;
+  }, []);
+}
+
 export function buildLyricsSlides(value = '', title = '') {
   const normalized = normalizeLyrics(value);
   if (!normalized) return [];
 
-  const sections = normalized
+  const sections = mergeShortSections(normalized
     .split(/\n\s*\n+/)
     .map((section) => section.trim())
     .filter(Boolean)
@@ -121,8 +142,7 @@ export function buildLyricsSlides(value = '', title = '') {
         merged.push(expandedLines);
       }
       return merged;
-    }, [])
-    .flatMap((lines) => splitLongSection(lines));
+    }, []));
 
   const slides = sections
     .filter((slide) => slide.length > 0);
