@@ -144,6 +144,17 @@ export function buildLyricsSlides(value = '', title = '') {
       return merged;
     }, []));
 
+  // A chorus marker at the very end belongs to the stanza immediately above
+  // it; never let a trailing marker render as a page by itself.
+  const lastSection = sections[sections.length - 1];
+  if (
+    sections.length > 1 &&
+    lastSection?.length === 1 &&
+    isLyricsHeading(lastSection[0])
+  ) {
+    sections.splice(-2, 2, [...sections[sections.length - 2], ...lastSection]);
+  }
+
   const slides = sections
     .filter((slide) => slide.length > 0);
 
