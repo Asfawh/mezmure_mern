@@ -93,31 +93,22 @@ function foldLeadingTitle(slides, title = '') {
   return slides;
 }
 
-function mergeShortSections(sections) {
-  return sections.reduce((merged, section) => {
-    const previous = merged[merged.length - 1];
-    const sectionStartsHeading = isLyricsHeading(section[0]);
-    const previousStartsHeading = previous && isLyricsHeading(previous[0]);
-
-    if (
-      previous &&
-      !sectionStartsHeading &&
-      !previousStartsHeading &&
-      previous.length + section.length <= MAX_LINES_PER_SLIDE
-    ) {
-      merged[merged.length - 1] = [...previous, ...section];
-    } else {
-      merged.push(section);
-    }
-    return merged;
-  }, []);
+function mergeOpeningFragments(sections) {
+  const opening = sections.slice(0, 3);
+  if (
+    opening.length === 3 &&
+    opening.every((section) => section.length === 1 && !isLyricsHeading(section[0]))
+  ) {
+    return [[...opening[0], ...opening[1], ...opening[2]], ...sections.slice(3)];
+  }
+  return sections;
 }
 
 export function buildLyricsSlides(value = '', title = '') {
   const normalized = normalizeLyrics(value);
   if (!normalized) return [];
 
-  const sections = mergeShortSections(normalized
+  const sections = mergeOpeningFragments(normalized
     .split(/\n\s*\n+/)
     .map((section) => section.trim())
     .filter(Boolean)
@@ -156,6 +147,7 @@ export function buildLyricsSlides(value = '', title = '') {
   }
 
   const slides = sections
+    .flatMap((section) => splitLongSection(section))
     .filter((slide) => slide.length > 0);
 
   return foldLeadingTitle(slides, title);
