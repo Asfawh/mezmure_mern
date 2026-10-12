@@ -104,11 +104,33 @@ function mergeOpeningFragments(sections) {
   return sections;
 }
 
+function mergeSingleLineRuns(sections) {
+  const result = [];
+  let run = [];
+
+  const flush = () => {
+    if (run.length >= 3) result.push(run.flat());
+    else result.push(...run);
+    run = [];
+  };
+
+  sections.forEach((section) => {
+    if (section.length === 1 && !isLyricsHeading(section[0])) {
+      run.push(section);
+    } else {
+      flush();
+      result.push(section);
+    }
+  });
+  flush();
+  return result;
+}
+
 export function buildLyricsSlides(value = '', title = '') {
   const normalized = normalizeLyrics(value);
   if (!normalized) return [];
 
-  const sections = mergeOpeningFragments(normalized
+  const sections = mergeSingleLineRuns(mergeOpeningFragments(normalized
     .split(/\n\s*\n+/)
     .map((section) => section.trim())
     .filter(Boolean)
@@ -133,7 +155,7 @@ export function buildLyricsSlides(value = '', title = '') {
         merged.push(expandedLines);
       }
       return merged;
-    }, []));
+    }, [])));
 
   // A chorus marker at the very end belongs to the stanza immediately above
   // it; never let a trailing marker render as a page by itself.
