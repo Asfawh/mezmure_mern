@@ -1,6 +1,6 @@
 const MAX_LINES_PER_SLIDE = 6;
 const MAX_CHARACTERS_PER_SLIDE = 420;
-const STANDALONE_MARKER = /^\s*(?:አዝ(?:ማች)?|chorus|refrain)\s*[:፡.\-‑–—_·]*\s*$/iu;
+const STANDALONE_MARKER = /^\s*(?:አዝ(?:ማች)?|chorus|refrain)\s*[:፡.=\-‑–—_·]*\s*$/iu;
 
 export const isLyricsHeading = (line = '') => (
   /^(?:አዝ(?:ማች)?|chorus|refrain|verse|meaning|translation)(?=[\s.:፡።…—–-]|$)/iu
@@ -10,7 +10,8 @@ export const isLyricsHeading = (line = '') => (
 function normalizeLyrics(value = '') {
   return value
     .replace(/\r\n?/g, '\n')
-    .replace(/አዝ(?:ማች)?[\s\-‑–—_·.።…]+(?=\n|$)/gu, '\n\nአዝ\n\n')
+    .replace(/አዝ(?:ማች)?[\s=\-‑–—_·.።…]+/gu, '\n\nአዝ\n\n')
+    .replace(/\b(?:chorus|refrain)\s*[:=\-‑–—_·.]+/giu, '\n\nChorus\n\n')
     .replace(/[ \t]{3,}/g, '\n\n')
     .replace(/([^\n])\s+(?=አዝ(?:ማች)?(?:[\s.:፡።…—–-]|$))/gu, '$1\n\n')
     .trim();
@@ -187,7 +188,8 @@ function repackSingleLineSlides(slides, rawValue) {
   if (
     packed.length > 1 &&
     packed.at(-1).length === 1 &&
-    !STANDALONE_MARKER.test(packed.at(-1)[0])
+    !STANDALONE_MARKER.test(packed.at(-1)[0]) &&
+    !STANDALONE_MARKER.test(packed.at(-2).at(-1))
   ) {
     packed[packed.length - 2].push(packed.pop()[0]);
   }
