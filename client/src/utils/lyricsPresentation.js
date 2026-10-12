@@ -127,9 +127,42 @@ function mergeSingleLineRuns(sections) {
   return result;
 }
 
+function buildChorusSlides(normalized) {
+  if (!/^\s*chorus\b/im.test(normalized)) return null;
+
+  const slides = [];
+  let current = [];
+  const flush = () => {
+    if (current.length) slides.push(current);
+    current = [];
+  };
+
+  normalized.split('\n').map((line) => line.trim()).filter(Boolean).forEach((line) => {
+    if (isLyricsHeading(line)) {
+      if (current.length) {
+        current.push(line);
+        flush();
+      } else if (slides.length) {
+        slides[slides.length - 1].push(line);
+      } else {
+        current.push(line);
+        flush();
+      }
+      return;
+    }
+    current.push(line);
+    if (current.length >= MAX_LINES_PER_SLIDE) flush();
+  });
+  flush();
+  return slides;
+}
+
 export function buildLyricsSlides(value = '', title = '') {
   const normalized = normalizeLyrics(value);
   if (!normalized) return [];
+
+  const chorusSlides = buildChorusSlides(normalized);
+  if (chorusSlides) return chorusSlides;
 
   const sections = mergeSingleLineRuns(mergeOpeningFragments(normalized
     .split(/\n\s*\n+/)
