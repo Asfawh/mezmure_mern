@@ -60,7 +60,8 @@ function splitLongSection(lines) {
 
   lines.forEach((line) => {
     const startsNewSection = isLyricsHeading(line) && currentSlide.length > 0 && !isLyricsHeading(currentSlide[0]);
-    const exceedsLineLimit = currentSlide.length >= MAX_LINES_PER_SLIDE;
+    const exceedsLineLimit =
+      currentSlide.length >= MAX_LINES_PER_SLIDE && !isLyricsHeading(line);
     const exceedsCharacterLimit =
       currentSlide.length > 0 &&
       characterCount + line.length > MAX_CHARACTERS_PER_SLIDE;
@@ -143,10 +144,10 @@ export function buildLyricsSlides(value = '', title = '') {
       const previous = merged[merged.length - 1];
       const isStandaloneHeading = expandedLines.length === 1 && isLyricsHeading(expandedLines[0]);
 
-      // Keep a chorus/refrain marker with the lyrics that follow it instead of
-      // allowing the marker to become a page by itself.
+      // Put a standalone chorus/refrain marker at the end of the preceding
+      // stanza. The next lyric section then begins on the following page.
       if (isStandaloneHeading && previous) {
-        merged.push(expandedLines);
+        merged[merged.length - 1] = [...previous, ...expandedLines];
       } else if (isStandaloneHeading && !previous) {
         merged.push(expandedLines);
       } else if (previous?.length === 1 && isLyricsHeading(previous[0])) {
