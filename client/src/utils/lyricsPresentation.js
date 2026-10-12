@@ -1,5 +1,6 @@
 const MAX_LINES_PER_SLIDE = 6;
 const MAX_CHARACTERS_PER_SLIDE = 420;
+const STANDALONE_MARKER = /^\s*(?:አዝ(?:ማች)?|chorus|refrain)\s*[:፡.\-‑–—_·]*\s*$/iu;
 
 export const isLyricsHeading = (line = '') => (
   /^(?:አዝ(?:ማች)?|chorus|refrain|verse|meaning|translation)(?=[\s.:፡።…—–-]|$)/iu
@@ -127,8 +128,8 @@ function mergeSingleLineRuns(sections) {
   return result;
 }
 
-function buildChorusSlides(normalized) {
-  if (!/^\s*chorus\b/im.test(normalized)) return null;
+function buildMarkerSlides(normalized) {
+  if (!normalized.split('\n').some((line) => STANDALONE_MARKER.test(line))) return null;
 
   const slides = [];
   let current = [];
@@ -138,7 +139,7 @@ function buildChorusSlides(normalized) {
   };
 
   normalized.split('\n').map((line) => line.trim()).filter(Boolean).forEach((line) => {
-    if (isLyricsHeading(line)) {
+    if (STANDALONE_MARKER.test(line)) {
       if (current.length) {
         current.push(line);
         flush();
@@ -157,12 +158,48 @@ function buildChorusSlides(normalized) {
   return slides;
 }
 
+function repackSingleLineSlides(slides, rawValue) {
+  if ((/[ \t]{3,}/u.test(rawValue) && !/\n/u.test(rawValue)) || !slides.some((slide) => slide.length === 1)) {
+    return slides;
+  }
+
+  const packed = [];
+  let current = [];
+  const flush = () => {
+    if (current.length) packed.push(current);
+    current = [];
+  };
+
+  slides.flat().forEach((line) => {
+    if (STANDALONE_MARKER.test(line)) {
+      if (current.length) {
+        current.push(line);
+        flush();
+      } else if (packed.length) {
+        packed[packed.length - 1].push(line);
+      }
+      return;
+    }
+    current.push(line);
+    if (current.length >= MAX_LINES_PER_SLIDE) flush();
+  });
+  flush();
+  if (
+    packed.length > 1 &&
+    packed.at(-1).length === 1 &&
+    !STANDALONE_MARKER.test(packed.at(-1)[0])
+  ) {
+    packed[packed.length - 2].push(packed.pop()[0]);
+  }
+  return packed;
+}
+
 export function buildLyricsSlides(value = '', title = '') {
   const normalized = normalizeLyrics(value);
   if (!normalized) return [];
 
-  const chorusSlides = buildChorusSlides(normalized);
-  if (chorusSlides) return chorusSlides;
+  const markerSlides = buildMarkerSlides(normalized);
+  if (markerSlides) return repackSingleLineSlides(markerSlides, value);
 
   const sections = mergeSingleLineRuns(mergeOpeningFragments(normalized
     .split(/\n\s*\n+/)
@@ -206,5 +243,5 @@ export function buildLyricsSlides(value = '', title = '') {
     .flatMap((section) => splitLongSection(section))
     .filter((slide) => slide.length > 0);
 
-  return foldLeadingTitle(slides, title);
+  return repackSingleLineSlides(foldLeadingTitle(slides, title), value);
 }
